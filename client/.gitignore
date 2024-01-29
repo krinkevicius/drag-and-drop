@@ -27,7 +27,6 @@ coverage
 *.sln
 *.sw?
 src/config.ts
-src/consts.ts
 src/trpc.ts
 e2e
 
