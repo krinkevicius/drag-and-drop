@@ -1,5 +1,20 @@
 <script setup lang="ts">
 import RecipeIcon from '@/components/RecipeIcon.vue'
+import RecipeItem from '@/components/RecipeItem.vue'
+import { useCreateRecipeStore } from '../stores/createRecipe'
+
+const createRecipeStore = useCreateRecipeStore()
+
+function dragOverHandler(event: DragEvent) {
+  if (createRecipeStore.canDrop) {
+    event.preventDefault()
+  }
+}
+
+function onDropHandler(event: DragEvent) {
+  const data = event.dataTransfer?.getData('text/plain')
+  console.log(`${data} was dropped`)
+}
 </script>
 
 <template>
@@ -8,7 +23,12 @@ import RecipeIcon from '@/components/RecipeIcon.vue'
       <RecipeIcon itemType="image" />
       <RecipeIcon itemType="description" />
     </div>
-    <div class="dropzone"></div>
+    <div class="dropzone" @dragover="dragOverHandler($event)" @drop="onDropHandler($event)">
+      <div v-for="(item, index) in createRecipeStore.recipeItems" :key="index">
+        {{ item }}
+        <RecipeItem />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +36,7 @@ import RecipeIcon from '@/components/RecipeIcon.vue'
 .admin {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 300px 300px;
+  grid-template-columns: 300px auto;
   grid-template-areas: 'sidebar drop-zone';
 }
 
