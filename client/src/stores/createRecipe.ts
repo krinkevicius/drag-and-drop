@@ -8,11 +8,16 @@ export type ItemRecord = {
 }
 
 export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
-  const recipeItems = ref<ItemRecord[]>([{ id: '20240130T130319Z', componentType: 'description' }])
+  const recipeItems = ref<ItemRecord[]>([])
 
-  function addToItems(item: keyof typeof RecipeItems) {
+  function addToItems(item: keyof typeof RecipeItems, index: number) {
     const id = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '')
-    recipeItems.value.push({ id, componentType: item })
+
+    if (index === -1) {
+      recipeItems.value.push({ id, componentType: item })
+    } else {
+      recipeItems.value.splice(index, 0, { id, componentType: item })
+    }
   }
 
   const canDrop = ref(true)
