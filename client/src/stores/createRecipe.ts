@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { RecipeItems } from '@/consts'
+
+export type ItemRecord = {
+  componentType: keyof typeof RecipeItems
+}
 
 export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
-  const recipeItems = ref([1, 2, 3, 5, 8])
+  const recipeItems = ref<ItemRecord[]>([{ componentType: 'image' }])
 
   const canDrop = ref(true)
 
-  return { recipeItems, canDrop }
+  function toggleCanDrop() {
+    canDrop.value = !canDrop.value
+  }
+
+  return { recipeItems, canDrop, toggleCanDrop }
 })

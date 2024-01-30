@@ -26,7 +26,7 @@ function onDropHandler(event: DragEvent) {
     <div class="dropzone" @dragover="dragOverHandler($event)" @drop="onDropHandler($event)">
       <div v-for="(item, index) in createRecipeStore.recipeItems" :key="index">
         {{ item }}
-        <RecipeItem />
+        <RecipeItem :item="item" />
       </div>
     </div>
   </div>
