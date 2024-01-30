@@ -2,6 +2,7 @@
 import RecipeIcon from '@/components/RecipeIcon.vue'
 import RecipeItem from '@/components/RecipeItem.vue'
 import { useCreateRecipeStore } from '../stores/createRecipe'
+import { RecipeItems } from '@/consts'
 
 const createRecipeStore = useCreateRecipeStore()
 
@@ -12,8 +13,8 @@ function dragOverHandler(event: DragEvent) {
 }
 
 function onDropHandler(event: DragEvent) {
-  const data = event.dataTransfer?.getData('text/plain')
-  console.log(`${data} was dropped`)
+  const data = event.dataTransfer?.getData('text/plain') as string as keyof typeof RecipeItems
+  createRecipeStore.addToItems(data)
 }
 
 function list() {
@@ -33,7 +34,6 @@ function list() {
         <RecipeItem :item="item" />
       </div>
     </div>
-    <button @click="createRecipeStore.addToStart">Add to start</button>
     <button @click="list">List</button>
   </div>
 </template>
