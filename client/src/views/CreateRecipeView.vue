@@ -15,6 +15,10 @@ function onDropHandler(event: DragEvent) {
   const data = event.dataTransfer?.getData('text/plain')
   console.log(`${data} was dropped`)
 }
+
+function list() {
+  console.log(createRecipeStore.recipeItems)
+}
 </script>
 
 <template>
@@ -24,11 +28,13 @@ function onDropHandler(event: DragEvent) {
       <RecipeIcon itemType="description" />
     </div>
     <div class="dropzone" @dragover="dragOverHandler($event)" @drop="onDropHandler($event)">
-      <div v-for="(item, index) in createRecipeStore.recipeItems" :key="index">
+      <div v-for="item in createRecipeStore.recipeItems" :key="item.id">
         {{ item }}
         <RecipeItem :item="item" />
       </div>
     </div>
+    <button @click="createRecipeStore.addToStart">Add to start</button>
+    <button @click="list">List</button>
   </div>
 </template>
 
