@@ -13,12 +13,7 @@ const pathToIcon = `src/assets/${props.itemType}.svg`
 
 function dragStartHandler(event: DragEvent) {
   event.dataTransfer!.setData('text/plain', props.itemType)
-  console.log(`${props.itemType} icon is being dragged`)
 }
-
-// function dragEndHandler() {
-//   store.resetInsertIndex()
-// }
 </script>
 
 <template>
