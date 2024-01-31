@@ -18,6 +18,14 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     } else {
       recipeItems.value.splice(index, 0, { id, componentType: item })
     }
+
+    resetInsertIndex()
+  }
+
+  const itemInsertIndex = ref<number | null>(null)
+
+  function resetInsertIndex() {
+    itemInsertIndex.value = null
   }
 
   const canDrop = ref(true)
@@ -26,5 +34,5 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     canDrop.value = !canDrop.value
   }
 
-  return { recipeItems, addToItems, canDrop, toggleCanDrop }
+  return { recipeItems, addToItems, itemInsertIndex, resetInsertIndex, canDrop, toggleCanDrop }
 })

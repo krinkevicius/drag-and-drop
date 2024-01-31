@@ -6,17 +6,19 @@ import { RecipeItems } from '@/consts'
 import { ref } from 'vue'
 
 const createRecipeStore = useCreateRecipeStore()
+
 const itemRefs = ref<HTMLElement[]>([])
+const itemInsertIndex = ref<number>(-1)
 
 function dragOverHandler(event: DragEvent) {
   if (createRecipeStore.canDrop) {
     event.preventDefault()
   }
 
-  // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
+  const testArray = [...document.querySelectorAll('.test')]
 
-  const closestItem = itemRefs.value.reduce(
-    (closest: any, child: HTMLElement) => {
+  const closestItem = testArray.reduce(
+    (closest: any, child: Element) => {
       const itemBorders = child.getBoundingClientRect()
       const offset = event.clientY - itemBorders.top - itemBorders.height / 2
       if (offset < 0 && offset > closest.offset) {
@@ -28,14 +30,16 @@ function dragOverHandler(event: DragEvent) {
     { offset: Number.NEGATIVE_INFINITY }
   ).element
 
-  const index = itemRefs.value.findIndex((item) => item === closestItem)
+  itemInsertIndex.value = testArray.findIndex((item) => item === closestItem)
 
-  console.log(index)
+  console.log(itemInsertIndex.value)
 }
 
 function onDropHandler(event: DragEvent) {
   const data = event.dataTransfer?.getData('text/plain') as string as keyof typeof RecipeItems
-  createRecipeStore.addToItems(data)
+  createRecipeStore.addToItems(data, itemInsertIndex.value)
+
+  itemInsertIndex.value = -1
 }
 
 function list() {
@@ -50,7 +54,7 @@ function list() {
       <RecipeIcon itemType="description" />
     </div>
     <div class="dropzone" @dragover="dragOverHandler($event)" @drop="onDropHandler($event)">
-      <div v-for="item in createRecipeStore.recipeItems" :key="item.id" ref="itemRefs">
+      <div class="test" v-for="item in createRecipeStore.recipeItems" :key="item.id" ref="itemRefs">
         {{ item }}
         <RecipeItem :item="item" />
       </div>
