@@ -28,11 +28,5 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     itemInsertIndex.value = null
   }
 
-  const canDrop = ref(true)
-
-  function toggleCanDrop() {
-    canDrop.value = !canDrop.value
-  }
-
-  return { recipeItems, addToItems, itemInsertIndex, resetInsertIndex, canDrop, toggleCanDrop }
+  return { recipeItems, addToItems, itemInsertIndex, resetInsertIndex }
 })

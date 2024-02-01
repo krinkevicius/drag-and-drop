@@ -12,10 +12,6 @@ type ClosestItem = {
 const createRecipeStore = useCreateRecipeStore()
 
 function dragOverHandler(event: DragEvent) {
-  if (createRecipeStore.canDrop) {
-    event.preventDefault()
-  }
-
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
   const testArray = [...document.querySelectorAll('.item-wrapper')]
@@ -52,7 +48,7 @@ function list() {
       <RecipeIcon itemType="image" />
       <RecipeIcon itemType="description" />
     </div>
-    <div class="dropzone" @dragover="dragOverHandler($event)" @drop="onDropHandler($event)">
+    <div class="dropzone" @dragover.prevent="dragOverHandler($event)" @drop="onDropHandler($event)">
       <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
       <div
         class="item-wrapper"
