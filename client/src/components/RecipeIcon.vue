@@ -12,7 +12,7 @@ const props = defineProps({
 const pathToIcon = `src/assets/${props.itemType}.svg`
 
 function dragStartHandler(event: DragEvent) {
-  event.dataTransfer!.setData('text/plain', props.itemType)
+  event.dataTransfer!.setData('dataFromIcon', props.itemType)
 }
 </script>
 

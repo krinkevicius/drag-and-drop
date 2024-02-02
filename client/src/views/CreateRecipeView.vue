@@ -30,11 +30,16 @@ function dragOverHandler(event: DragEvent) {
   ).element
 
   createRecipeStore.itemInsertIndex = testArray.findIndex((item) => item === closestItem)
+
+  console.log(createRecipeStore.itemInsertIndex)
 }
 
 function onDropHandler(event: DragEvent) {
-  const data = event.dataTransfer?.getData('text/plain') as string as keyof typeof RecipeItems
-  createRecipeStore.addToItems(data, createRecipeStore.itemInsertIndex!)
+  const dataFromIcon = event.dataTransfer!.getData('dataFromIcon') as keyof typeof RecipeItems
+
+  if (dataFromIcon) {
+    createRecipeStore.addToItems(dataFromIcon, createRecipeStore.itemInsertIndex!)
+  }
 }
 
 function list() {
@@ -59,7 +64,6 @@ function list() {
         <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === index">
           INSERT HERE
         </div>
-
         <RecipeItem :item="item" />
       </div>
       <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === -1">INSERT HERE</div>
