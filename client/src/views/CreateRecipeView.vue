@@ -12,6 +12,12 @@ type ClosestItem = {
 const createRecipeStore = useCreateRecipeStore()
 
 function dragOverHandler(event: DragEvent) {
+  if (
+    !event.dataTransfer!.getData('dataFromIcon') &&
+    !event.dataTransfer!.getData('dataFromItem')
+  ) {
+    return
+  }
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
   const testArray = [...document.querySelectorAll('.item-wrapper')]
@@ -36,9 +42,11 @@ function dragOverHandler(event: DragEvent) {
 
 function onDropHandler(event: DragEvent) {
   const dataFromIcon = event.dataTransfer!.getData('dataFromIcon') as keyof typeof RecipeItems
-
+  const dataFromItem = event.dataTransfer!.getData('dataFromItem')
   if (dataFromIcon) {
     createRecipeStore.addToItems(dataFromIcon, createRecipeStore.itemInsertIndex!)
+  } else if (dataFromItem) {
+    console.log('Items should be swapped')
   }
 }
 
@@ -50,6 +58,7 @@ function list() {
 <template>
   <div class="admin">
     <div class="sidebar">
+      000
       <RecipeIcon itemType="image" />
       <RecipeIcon itemType="description" />
     </div>

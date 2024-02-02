@@ -3,20 +3,37 @@ import type { ItemRecord } from '@/stores/createRecipe'
 import type { PropType } from 'vue'
 import { RecipeItems } from '@/consts'
 import { ref } from 'vue'
+import { useCreateRecipeStore } from '@/stores/createRecipe'
 
 const props = defineProps({
   item: { type: Object as PropType<ItemRecord>, required: true },
 })
+
+const store = useCreateRecipeStore()
 
 const isDraggable = ref(true)
 
 function toggleDrag() {
   isDraggable.value = !isDraggable.value
 }
+
+function dragStartHandler(event: DragEvent) {
+  const index = store.recipeItems.findIndex((item) => item === props.item)
+  event.dataTransfer!.setData('dataFromItem', index.toString())
+}
+
+function dragEndHandler() {
+  store.resetInsertIndex()
+}
 </script>
 
 <template>
-  <div class="wrapper" :draggable="isDraggable">
+  <div
+    class="wrapper"
+    :draggable="isDraggable"
+    @dragstart="dragStartHandler"
+    @dragend="dragEndHandler"
+  >
     This is a single recipe item
     <div class="insert" @mouseenter="toggleDrag" @mouseleave="toggleDrag">
       <component :is="RecipeItems[props.item.componentType].component"></component>
