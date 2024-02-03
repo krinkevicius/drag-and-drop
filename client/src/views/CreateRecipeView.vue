@@ -20,7 +20,7 @@ function dragOverHandler(event: DragEvent) {
   }
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
-  const testArray = [...document.querySelectorAll('.item-wrapper')]
+  const testArray = [...document.querySelectorAll('.wrapperonni:not(.dragging)')]
 
   const closestItem = testArray.reduce(
     (closest: ClosestItem, child: Element) => {
@@ -42,11 +42,14 @@ function dragOverHandler(event: DragEvent) {
 
 function onDropHandler(event: DragEvent) {
   const dataFromIcon = event.dataTransfer!.getData('dataFromIcon') as keyof typeof RecipeItems
-  const dataFromItem = event.dataTransfer!.getData('dataFromItem')
+  const dataFromItem = event.dataTransfer!.getData('dataFromItem') as `${number}`
   if (dataFromIcon) {
     createRecipeStore.addToItems(dataFromIcon, createRecipeStore.itemInsertIndex!)
   } else if (dataFromItem) {
-    console.log('Items should be swapped')
+    console.log(
+      `dataFromItem = ${dataFromItem}, insertIndex = ${createRecipeStore.itemInsertIndex}`
+    )
+    createRecipeStore.moveItem(parseInt(dataFromItem, 10), createRecipeStore.itemInsertIndex!)
   }
 }
 

@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <div class="description-insert">This is a description</div>
+  <div class="description-insert">
+    <textarea></textarea>
+  </div>
 </template>
 
 <style scoped>

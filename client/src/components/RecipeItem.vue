@@ -12,24 +12,28 @@ const props = defineProps({
 const store = useCreateRecipeStore()
 
 const isDraggable = ref(true)
+const isDragged = ref(false)
 
 function toggleDrag() {
   isDraggable.value = !isDraggable.value
 }
 
 function dragStartHandler(event: DragEvent) {
+  isDragged.value = true
   const index = store.recipeItems.findIndex((item) => item === props.item)
   event.dataTransfer!.setData('dataFromItem', index.toString())
 }
 
 function dragEndHandler() {
+  isDragged.value = false
   store.resetInsertIndex()
 }
 </script>
 
 <template>
   <div
-    class="wrapper"
+    class="wrapperonni"
+    :class="{ dragging: isDragged }"
     :draggable="isDraggable"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
@@ -42,10 +46,14 @@ function dragEndHandler() {
 </template>
 
 <style scoped>
-.wrapper {
+.wrapperonni {
   min-height: 100px;
   text-align: center;
   border: 5px solid black;
+}
+
+.dragging {
+  opacity: 50%;
 }
 
 .insert {

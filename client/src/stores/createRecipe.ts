@@ -22,11 +22,19 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     resetInsertIndex()
   }
 
+  // Does not work for moving to the end of array
+  // Unexpected behaviour to move towards end of array
+  function moveItem(fromIndex: number, toIndex: number) {
+    recipeItems.value.splice(toIndex, 0, recipeItems.value.splice(fromIndex, 1)[0])
+
+    resetInsertIndex()
+  }
+
   const itemInsertIndex = ref<number | null>(null)
 
   function resetInsertIndex() {
     itemInsertIndex.value = null
   }
 
-  return { recipeItems, addToItems, itemInsertIndex, resetInsertIndex }
+  return { recipeItems, addToItems, moveItem, itemInsertIndex, resetInsertIndex }
 })
