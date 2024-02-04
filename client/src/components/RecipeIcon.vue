@@ -14,6 +14,11 @@ const pathToIcon = `src/assets/${props.itemType}.svg`
 function dragStartHandler(event: DragEvent) {
   event.dataTransfer!.setData('dataFromIcon', props.itemType)
 }
+
+function dragEndHandler() {
+  console.log('Icon is resetting the index')
+  store.resetInsertIndex()
+}
 </script>
 
 <template>
@@ -21,7 +26,7 @@ function dragStartHandler(event: DragEvent) {
     class="item-icon"
     draggable="true"
     @dragstart="dragStartHandler($event)"
-    @dragend="store.resetInsertIndex"
+    @dragend="dragEndHandler"
     :style="{ backgroundImage: `url(${pathToIcon})` }"
   ></div>
 </template>

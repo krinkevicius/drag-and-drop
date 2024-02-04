@@ -20,7 +20,8 @@ function dragOverHandler(event: DragEvent) {
   }
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
-  const testArray = [...document.querySelectorAll('.wrapperonni:not(.dragging)')]
+  // .wrapperonni:not(.dragging)
+  const testArray = [...document.querySelectorAll('.item-wrapper')]
 
   const closestItem = testArray.reduce(
     (closest: ClosestItem, child: Element) => {
@@ -35,8 +36,16 @@ function dragOverHandler(event: DragEvent) {
     { offset: Number.NEGATIVE_INFINITY } as ClosestItem
   ).element
 
-  createRecipeStore.itemInsertIndex = testArray.findIndex((item) => item === closestItem)
-
+  const closestItemIndex = testArray.findIndex((item) => item === closestItem)
+  //   createRecipeStore.itemInsertIndex = itemIndex
+  const dataFromItem = parseInt(event.dataTransfer!.getData('dataFromItem'))
+  if (closestItemIndex !== dataFromItem && closestItemIndex !== dataFromItem + 1) {
+    createRecipeStore.itemInsertIndex = closestItemIndex
+  }
+  //   else {
+  //     createRecipeStore.itemInsertIndex = dataFromItem
+  //   }
+  console.log(dataFromItem)
   console.log(createRecipeStore.itemInsertIndex)
 }
 
@@ -44,12 +53,12 @@ function onDropHandler(event: DragEvent) {
   const dataFromIcon = event.dataTransfer!.getData('dataFromIcon') as keyof typeof RecipeItems
   const dataFromItem = event.dataTransfer!.getData('dataFromItem') as `${number}`
   if (dataFromIcon) {
-    createRecipeStore.addToItems(dataFromIcon, createRecipeStore.itemInsertIndex!)
+    const newItem = createRecipeStore.createNewItem(dataFromIcon)
+    console.log(`trying to add item at index ${createRecipeStore.itemInsertIndex}`)
+    createRecipeStore.addToItems(newItem, createRecipeStore.itemInsertIndex!)
   } else if (dataFromItem) {
-    console.log(
-      `dataFromItem = ${dataFromItem}, insertIndex = ${createRecipeStore.itemInsertIndex}`
-    )
-    createRecipeStore.moveItem(parseInt(dataFromItem, 10), createRecipeStore.itemInsertIndex!)
+    console.log(`item should be moved from ${dataFromItem} to ${createRecipeStore.itemInsertIndex}`)
+    createRecipeStore.moveItem(parseInt(dataFromItem, 10), createRecipeStore.itemInsertIndex)
   }
 }
 
@@ -73,12 +82,12 @@ function list() {
         :key="item.id"
         ref="itemRefs"
       >
-        <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === index">
+        <!-- <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === index">
           INSERT HERE
-        </div>
+        </div> -->
         <RecipeItem :item="item" />
       </div>
-      <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === -1">INSERT HERE</div>
+      <!-- <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === -1">INSERT HERE</div> -->
     </div>
     <button @click="list">List</button>
   </div>
