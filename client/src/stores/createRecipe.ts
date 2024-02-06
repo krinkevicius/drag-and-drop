@@ -5,6 +5,7 @@ import { RecipeItems } from '@/consts'
 export type ItemRecord = {
   id: string
   componentType: keyof typeof RecipeItems
+  data: { [key: string]: any }
 }
 
 export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
@@ -12,8 +13,8 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
 
   function createNewItem(componentType: keyof typeof RecipeItems): ItemRecord {
     const id = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '')
-
-    return { id, componentType }
+    const data = { ...RecipeItems[componentType].data }
+    return { id, componentType, data }
   }
 
   function addToItems(item: ItemRecord, index: number) {
@@ -22,12 +23,8 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     } else {
       recipeItems.value.splice(index, 0, item)
     }
-    console.log(`${item} has been added`)
-    // resetInsertIndex()
   }
 
-  // Does not work for moving to the end of array
-  // Unexpected behaviour to move towards end of array
   function moveItem(fromIndex: number, toIndex: number | undefined) {
     if (toIndex === undefined) return
     console.log('moving items')
@@ -46,19 +43,13 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
 
   watch(itemInsertIndex, (newValue) => {
     recipeItems.value = recipeItems.value.filter((item) => item.componentType !== 'help')
-    // const oldIndex = recipeItems.value.findIndex((item) => item.componentType === 'help')
-    // recipeItems.value.splice(oldIndex, 1)
 
     if (newValue !== undefined) {
       addToItems(createNewItem('help'), newValue)
-      //   console.log(itemInsertIndex.value)
-    } else {
-      console.log('index is undefined')
     }
   })
 
   function resetInsertIndex() {
-    console.log('index has been reset')
     itemInsertIndex.value = undefined
   }
 
