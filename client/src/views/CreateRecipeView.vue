@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import RecipeIcon from '@/components/RecipeIcon.vue'
 import RecipeItem from '@/components/RecipeItem.vue'
-import { useCreateRecipeStore } from '../stores/createRecipe'
+import { useCreateRecipeStore } from '@/stores/createRecipe'
 import { RecipeItems } from '@/consts'
+import { ref } from 'vue'
 
 type ClosestItem = {
   offset: number
   element: Element
 }
+
+const icons = ref<(keyof typeof RecipeItems)[]>(['image', 'description', 'list', 'categories'])
 
 const createRecipeStore = useCreateRecipeStore()
 
@@ -20,10 +23,9 @@ function dragOverHandler(event: DragEvent) {
   }
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
-  // .wrapperonni:not(.dragging)
-  const testArray = [...document.querySelectorAll('.item-wrapper')]
+  const itemWrappers = [...document.querySelectorAll('.item-wrapper')]
 
-  const closestItem = testArray.reduce(
+  const closestItem = itemWrappers.reduce(
     (closest: ClosestItem, child: Element) => {
       const itemBorders = child.getBoundingClientRect()
       const offset = event.clientY - itemBorders.top - itemBorders.height / 2
@@ -36,17 +38,11 @@ function dragOverHandler(event: DragEvent) {
     { offset: Number.NEGATIVE_INFINITY } as ClosestItem
   ).element
 
-  const closestItemIndex = testArray.findIndex((item) => item === closestItem)
-  //   createRecipeStore.itemInsertIndex = itemIndex
+  const closestItemIndex = itemWrappers.findIndex((item) => item === closestItem)
   const dataFromItem = parseInt(event.dataTransfer!.getData('dataFromItem'))
   if (closestItemIndex !== dataFromItem && closestItemIndex !== dataFromItem + 1) {
     createRecipeStore.itemInsertIndex = closestItemIndex
   }
-  //   else {
-  //     createRecipeStore.itemInsertIndex = dataFromItem
-  //   }
-  console.log(dataFromItem)
-  console.log(createRecipeStore.itemInsertIndex)
 }
 
 function onDropHandler(event: DragEvent) {
@@ -54,10 +50,8 @@ function onDropHandler(event: DragEvent) {
   const dataFromItem = event.dataTransfer!.getData('dataFromItem') as `${number}`
   if (dataFromIcon) {
     const newItem = createRecipeStore.createNewItem(dataFromIcon)
-    console.log(`trying to add item at index ${createRecipeStore.itemInsertIndex}`)
     createRecipeStore.addToItems(newItem, createRecipeStore.itemInsertIndex!)
   } else if (dataFromItem) {
-    console.log(`item should be moved from ${dataFromItem} to ${createRecipeStore.itemInsertIndex}`)
     createRecipeStore.moveItem(parseInt(dataFromItem, 10), createRecipeStore.itemInsertIndex)
   }
 }
@@ -71,23 +65,20 @@ function list() {
   <div class="admin">
     <div class="sidebar">
       000
-      <RecipeIcon itemType="image" />
-      <RecipeIcon itemType="description" />
+      <div v-for="(icon, index) in icons" :key="index">
+        <RecipeIcon :itemType="icon" />
+      </div>
     </div>
     <div class="dropzone" @dragover.prevent="dragOverHandler($event)" @drop="onDropHandler($event)">
       <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
       <div
         class="item-wrapper"
-        v-for="(item, index) in createRecipeStore.recipeItems"
+        v-for="item in createRecipeStore.recipeItems"
         :key="item.id"
         ref="itemRefs"
       >
-        <!-- <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === index">
-          INSERT HERE
-        </div> -->
         <RecipeItem :item="item" />
       </div>
-      <!-- <div class="insert-line" v-if="createRecipeStore.itemInsertIndex === -1">INSERT HERE</div> -->
     </div>
     <button @click="list">List</button>
   </div>
@@ -114,9 +105,6 @@ function list() {
   display: flex;
   flex-direction: column;
   gap: 1em;
-}
-.insert-line {
-  border: 8px solid black;
 }
 
 .item-wrapper {
