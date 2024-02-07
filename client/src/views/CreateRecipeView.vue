@@ -69,15 +69,24 @@ function list() {
         <RecipeIcon :itemType="icon" />
       </div>
     </div>
-    <div class="dropzone" @dragover.prevent="dragOverHandler($event)" @drop="onDropHandler($event)">
-      <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
+    <div class="main-area">
+      <!-- v-model and required? -->
+      <input label="Recipe Name" type="text" placeholder="Enter recipe name" />
+      <button>Create Recipe</button>
       <div
-        class="item-wrapper"
-        v-for="item in createRecipeStore.recipeItems"
-        :key="item.id"
-        ref="itemRefs"
+        class="dropzone"
+        @dragover.prevent="dragOverHandler($event)"
+        @drop="onDropHandler($event)"
       >
-        <RecipeItem :item="item" />
+        <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
+        <div
+          class="item-wrapper"
+          v-for="item in createRecipeStore.recipeItems"
+          :key="item.id"
+          ref="itemRefs"
+        >
+          <RecipeItem :item="item" />
+        </div>
       </div>
     </div>
     <button @click="list">List</button>
@@ -89,7 +98,7 @@ function list() {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 300px auto;
-  grid-template-areas: 'sidebar drop-zone';
+  grid-template-areas: 'sidebar main-area';
 }
 
 .sidebar {
@@ -99,8 +108,10 @@ function list() {
   padding: 20px;
 }
 
+.main-area {
+  grid-area: main-area;
+}
 .dropzone {
-  grid-area: drop-zone;
   height: 100vh;
   display: flex;
   flex-direction: column;
