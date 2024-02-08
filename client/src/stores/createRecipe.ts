@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { RecipeItems } from '@/consts'
+import { trpc } from '@/trpc'
 
 export type ItemRecord = {
   id: string
@@ -53,5 +54,27 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     itemInsertIndex.value = undefined
   }
 
-  return { recipeItems, createNewItem, addToItems, moveItem, itemInsertIndex, resetInsertIndex }
+  const recipeName = ref('')
+
+  function createRecipe() {
+    const filteredItems = recipeItems.value.filter((item) => Object.keys(item.data).length > 0)
+
+    if (!filteredItems.length || recipeName.value === '') {
+      console.log('no data in items')
+      return
+    }
+    console.log('recipe should be created')
+    const itemIds = filteredItems.map((item) => item.id)
+  }
+
+  return {
+    recipeItems,
+    createNewItem,
+    addToItems,
+    moveItem,
+    itemInsertIndex,
+    resetInsertIndex,
+    recipeName,
+    createRecipe,
+  }
 })
