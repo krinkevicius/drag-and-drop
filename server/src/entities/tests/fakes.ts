@@ -1,5 +1,6 @@
 import { Chance } from 'chance'
 import { User, Recipe } from '..'
+import { UserRoles } from '../user'
 
 const chance = Chance()
 
@@ -7,7 +8,7 @@ export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
   id: chance.integer({ min: 1, max: 2147483647 }),
   email: chance.email(),
   username: chance.string({ alpha: true, numeric: true, length: 5 }),
-  role: 'registeredUser',
+  role: UserRoles.RegistererUser,
   password: chance.string({ length: 8 }),
   favoriteRecipes: [],
   ...overrides,

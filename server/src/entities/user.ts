@@ -41,6 +41,10 @@ export class User {
   // comments: Comment[]
 }
 
+export enum UserRoles {
+  Admin = 'admin',
+  RegistererUser = 'registeredUser',
+}
 export type UserBare = Omit<User, 'favoriteRecipes' | 'comments'>
 
 export const userSchema = validates<UserBare>().with({
@@ -52,7 +56,10 @@ export const userSchema = validates<UserBare>().with({
     .trim()
     .regex(/^[a-zA-Z0-9]+$/),
   password: z.string().min(8).max(64),
-  role: z.union([z.literal('admin'), z.literal('registeredUser')]),
+  role: z.union([
+    z.literal(UserRoles.Admin),
+    z.literal(UserRoles.RegistererUser),
+  ]),
 })
 
 export const userInsertSchema = userSchema.omit({ id: true, role: true })
@@ -61,11 +68,6 @@ export type AuthUser = Pick<
   User,
   'id' | 'username' | 'role' | 'favoriteRecipes'
 >
-
-export enum UserRoles {
-  Admin = 'admin',
-  RegistererUser = 'registeredUser',
-}
 
 export const authUserSchema = validates<AuthUser>().with({
   id: z.number().int().positive(),
