@@ -1,5 +1,5 @@
 import { Chance } from 'chance'
-import { User, Recipe } from '..'
+import { User, Recipe, Description } from '..'
 import { UserRoles } from '../user'
 
 const chance = Chance()
@@ -19,8 +19,15 @@ export const fakeRecipe = <T extends Partial<Recipe>>(
 ) => ({
   id: chance.integer({ min: 1, max: 2147483647 }),
   name: chance.word(),
-  itemIds: Array.from({ length: 2 }, () =>
-    chance.date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '')
-  ),
+  itemIds: Array.from({ length: 2 }, () => chance.guid({ version: 4 })),
+  ...overrides,
+})
+
+export const fakeDescription = <T extends Partial<Description>>(
+  overrides: T = {} as T
+) => ({
+  id: chance.guid({ version: 4 }),
+  descriptionText: `<p>${chance.word()}</p>`,
+  recipeId: chance.integer({ min: 1, max: 2147483647 }),
   ...overrides,
 })

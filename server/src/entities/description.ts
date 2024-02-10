@@ -1,4 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm'
+import { validates } from '@server/utils/validation'
+import { z } from 'zod'
 import { Recipe } from '.'
 
 @Entity()
@@ -9,7 +11,7 @@ export class Description {
   id: string
 
   @Column('text')
-  description: string
+  descriptionText: string
 
   @Column('integer')
   recipeId: number
@@ -17,3 +19,14 @@ export class Description {
   @ManyToOne(() => Recipe, (recipe) => recipe.descriptions)
   recipe: Recipe
 }
+
+export type DescriptionBare = Omit<Description, 'recipe'>
+
+export const descriptionSchema = validates<DescriptionBare>().with({
+  id: z.string().uuid(),
+  descriptionText: z
+    .string()
+    .trim()
+    .min(1, 'Cannot add a description with no text!'),
+  recipeId: z.number().int().positive(),
+})
