@@ -1,11 +1,12 @@
 import { createTestDatabase } from '@tests/utils/database'
 import { Recipe } from '@server/entities'
 import { fakeUser, fakeRecipe } from '@server/entities/tests/fakes'
+import { UserRoles } from '@server/entities/user'
 import recipeRouter from '..'
 
 const db = await createTestDatabase()
 const testRecipe = fakeRecipe()
-const adminUser = fakeUser({ role: 'admin' })
+const adminUser = fakeUser({ role: UserRoles.Admin })
 const registeredUser = fakeUser()
 
 it('should save a new recipe in the database', async () => {
@@ -39,5 +40,12 @@ it('does not allow to add a recipe with the same name', async () => {
   const { create } = recipeRouter.createCaller({ db, authUser: adminUser })
   await expect(create(testRecipe)).rejects.toThrow(
     /Recipe with this name already exists/
+  )
+})
+
+it('does not allow to add a recipe without items', async () => {
+  const { create } = recipeRouter.createCaller({ db, authUser: adminUser })
+  await expect(create(fakeRecipe({ itemIds: [] }))).rejects.toThrow(
+    /Cannot create a recipe without items/
   )
 })
