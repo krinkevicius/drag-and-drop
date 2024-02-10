@@ -1,10 +1,20 @@
 <script setup lang="ts">
-// Add script
+import { useCreateRecipeStore } from '../stores/createRecipe'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+
+const store = useCreateRecipeStore()
+
+const props = defineProps({
+  id: { type: String, required: true },
+})
+
+const item = store.recipeItems.find((item) => item.id === props.id)
 </script>
 
 <template>
   <div class="description-insert">
-    <textarea></textarea>
+    <QuillEditor theme="snow" v-model:content="item!.data.description" contentType="html" />
   </div>
 </template>
 

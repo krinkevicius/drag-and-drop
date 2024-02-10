@@ -20,6 +20,7 @@
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
     "@trpc/client": "^10.41.0",
+    "@vueup/vue-quill": "^1.2.0",
     "flowbite": "^2.0.0",
     "flowbite-vue": "^0.1.0",
     "pinia": "^2.1.4",

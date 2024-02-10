@@ -32,7 +32,7 @@ function dragEndHandler() {
 
 <template>
   <div
-    class="wrapperonni"
+    class="wrapper"
     :class="{ dragging: isDragged }"
     :draggable="isDraggable"
     @dragstart="dragStartHandler"
@@ -40,13 +40,13 @@ function dragEndHandler() {
   >
     This is a single recipe item
     <div class="insert" @mouseenter="toggleDrag" @mouseleave="toggleDrag">
-      <component :is="RecipeItems[props.item.componentType].component"></component>
+      <component :is="RecipeItems[props.item.componentType].component" :id="item.id"></component>
     </div>
   </div>
 </template>
 
 <style scoped>
-.wrapperonni {
+.wrapper {
   min-height: 100px;
   text-align: center;
   border: 5px solid black;
