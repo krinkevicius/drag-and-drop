@@ -1,10 +1,10 @@
 import path from 'path'
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   test: {
-    environment: 'node',
+    environment: 'jsdom',
     globals: true,
     coverage: {
       provider: 'v8',
@@ -16,4 +16,4 @@ export default defineConfig({
       '@tests': path.resolve(__dirname, './tests'),
     },
   },
-});
+})
