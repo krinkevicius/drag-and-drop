@@ -5,6 +5,7 @@ import {
   fakeUser,
 } from '@server/entities/tests/fakes'
 import { Description, Recipe } from '@server/entities'
+import { createCallerFactory } from '@server/trpc'
 import descriptionRouter from '..'
 
 const db = await createTestDatabase()
@@ -12,7 +13,7 @@ const authUser = fakeUser()
 const testRecipe = await db.getRepository(Recipe).save(fakeRecipe())
 const testDescription = fakeDescription({ recipeId: testRecipe.id })
 
-const { create } = descriptionRouter.createCaller({ db, authUser })
+const { create } = createCallerFactory(descriptionRouter)({ db, authUser })
 
 it('should save description in the database', async () => {
   const newDescription = await create(testDescription)

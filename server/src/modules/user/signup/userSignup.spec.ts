@@ -1,12 +1,13 @@
 import { User } from '@server/entities'
 import { createTestDatabase } from '@tests/utils/database'
 import { fakeUser } from '@server/entities/tests/fakes'
+import { createCallerFactory } from '@server/trpc'
 import userRouter from '..'
 
 const db = await createTestDatabase()
 const userRepository = db.getRepository(User)
 
-const { signup } = userRouter.createCaller({ db })
+const { signup } = createCallerFactory(userRouter)({ db })
 
 it('should allow guest to signup with provided email, username and password', async () => {
   const newUser = fakeUser()
