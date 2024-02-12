@@ -8,7 +8,6 @@ import recipeRouter from '..'
 const db = await createTestDatabase()
 const testRecipe = fakeRecipe()
 const adminUser = fakeUser({ role: UserRoles.Admin })
-const registeredUser = fakeUser()
 const createCaller = createCallerFactory(recipeRouter)
 
 it('should save a new recipe in the database', async () => {
@@ -29,17 +28,6 @@ it('should save a new recipe in the database', async () => {
     ...testRecipe,
     id: newRecipe.id,
   })
-})
-
-it('should throw an error if non-admin user tries to create a recipe', async () => {
-  const { create } = createCaller({
-    db,
-    authUser: registeredUser,
-  })
-
-  await expect(create(fakeRecipe())).rejects.toThrow(
-    /You do not have authorization to create a new recipe!/
-  )
 })
 
 it('does not allow to add a recipe with the same name', async () => {

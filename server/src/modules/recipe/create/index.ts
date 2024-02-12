@@ -1,17 +1,10 @@
 import { adminProcedure } from '@server/trpc/authenticatedProcedure'
 import { Recipe, recipeInsertSchema } from '@server/entities/recipe'
-import { UserRoles } from '@server/entities/user'
 import { TRPCError } from '@trpc/server'
 
 export default adminProcedure
   .input(recipeInsertSchema)
-  .mutation(async ({ input: dataForRecipe, ctx: { db, authUser } }) => {
-    if (authUser.role !== UserRoles.Admin) {
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'You do not have authorization to create a new recipe!',
-      })
-    }
+  .mutation(async ({ input: dataForRecipe, ctx: { db } }) => {
     try {
       const newRecipe: Recipe = await db
         .getRepository(Recipe)
