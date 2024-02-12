@@ -9,7 +9,7 @@ import { createCallerFactory } from '@server/trpc'
 import descriptionRouter from '..'
 
 const db = await createTestDatabase()
-const authUser = fakeUser()
+const authUser = fakeUser({ role: 'admin' })
 const testRecipe = await db.getRepository(Recipe).save(fakeRecipe())
 const testDescription = fakeDescription({ recipeId: testRecipe.id })
 
