@@ -18,12 +18,12 @@ const adminTokenSchema = z.object({
   user: adminUserSchema,
 })
 
-export function buildProcedure(userRole: UserRoles, verify: VerifyToken) {
+export function buildProcedure(requiredRole: UserRoles, verify: VerifyToken) {
   function getUserFromToken(token: string) {
     try {
       const tokenVerified = verify(token)
       const tokenParsed =
-        userRole === UserRoles.Admin
+        requiredRole === UserRoles.Admin
           ? adminTokenSchema.parse(tokenVerified)
           : tokenSchema.parse(tokenVerified)
 
@@ -33,8 +33,19 @@ export function buildProcedure(userRole: UserRoles, verify: VerifyToken) {
     }
   }
   return publicProcedure.use(({ ctx, next }) => {
+    // Our context might already have a user (from previous procedure)
+    // Check whether non-admin user is trying to run admin procedure.
+    // If so throw an error, otherwise proceed
     if (ctx.authUser) {
-      // If we have an authenticated user, we can proceed.
+      if (
+        requiredRole === UserRoles.Admin &&
+        ctx.authUser.role !== UserRoles.Admin
+      ) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Invalid token. Please login with admin user!',
+        })
+      }
       return next({
         ctx: {
           authUser: ctx.authUser,
@@ -66,7 +77,9 @@ export function buildProcedure(userRole: UserRoles, verify: VerifyToken) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: `Invalid token.${
-          userRole === UserRoles.Admin ? ' Please login with admin user!' : ''
+          requiredRole === UserRoles.Admin
+            ? ' Please login with admin user!'
+            : ''
         }`,
       })
     }
