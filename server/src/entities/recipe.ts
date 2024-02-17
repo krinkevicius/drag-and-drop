@@ -7,7 +7,7 @@ import {
 } from 'typeorm'
 import { validates } from '@server/utils/validation'
 import { z } from 'zod'
-import { Description } from '.'
+import { Description, Image } from '.'
 
 @Entity()
 export class Recipe {
@@ -23,9 +23,12 @@ export class Recipe {
 
   @OneToMany(() => Description, (description) => description.recipe)
   descriptions: Description[]
+
+  @OneToMany(() => Image, (image) => image.recipe)
+  images: Image[]
 }
 
-export type RecipeBare = Omit<Recipe, 'descriptions'>
+export type RecipeBare = Omit<Recipe, 'descriptions' | 'images'>
 
 export const recipeSchema = validates<RecipeBare>().with({
   id: z.number().int().positive(),
