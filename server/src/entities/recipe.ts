@@ -1,13 +1,15 @@
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm'
 import { validates } from '@server/utils/validation'
 import { z } from 'zod'
-import { Description, Image } from '.'
+import { Category, Description, Image } from '.'
 
 @Entity()
 export class Recipe {
@@ -26,9 +28,13 @@ export class Recipe {
 
   @OneToMany(() => Image, (image) => image.recipe)
   images: Image[]
+
+  @ManyToMany(() => Category, (category) => category.recipes)
+  @JoinTable()
+  categories: Category[]
 }
 
-export type RecipeBare = Omit<Recipe, 'descriptions' | 'images'>
+export type RecipeBare = Omit<Recipe, 'descriptions' | 'images' | 'categories'>
 
 export const recipeSchema = validates<RecipeBare>().with({
   id: z.number().int().positive(),
