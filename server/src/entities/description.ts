@@ -7,7 +7,7 @@ import { Recipe } from '.'
 export class Description {
   // Using PrimaryColumn instead of PrimaryGeneratedColumn
   // as id will be passed from the FrontEnd
-  @PrimaryColumn('text')
+  @PrimaryColumn('uuid')
   id: string
 
   @Column('text')

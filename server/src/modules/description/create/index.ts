@@ -1,9 +1,14 @@
-import { adminProcedure } from '@server/trpc/authenticatedProcedure'
-import { Description, descriptionSchema } from '@server/entities/description'
+import {
+  Description,
+  DescriptionBare,
+  descriptionSchema,
+} from '@server/entities/description'
+import { DataSource, EntityManager } from 'typeorm'
 
-export default adminProcedure
-  .input(descriptionSchema)
-  .mutation(async ({ input, ctx: { db } }) => {
-    const newDescription = await db.getRepository(Description).save(input)
-    return newDescription
-  })
+export default async function createDescription(
+  descriptionData: DescriptionBare,
+  dbOrManager: DataSource | EntityManager
+) {
+  const parsedDescriptionData = descriptionSchema.parse(descriptionData)
+  return dbOrManager.getRepository(Description).save(parsedDescriptionData)
+}
