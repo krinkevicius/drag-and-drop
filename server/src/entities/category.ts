@@ -26,7 +26,12 @@ export type CategoryBare = Omit<Category, 'recipes'>
 
 export const categorySchema = validates<CategoryBare>().with({
   id: z.number().int().positive(),
-  name: z.string().trim().toLowerCase().min(1).max(100),
+  name: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(1, 'Category cannot be empty!')
+    .max(100),
 })
 
 export const categoryInsertSchema = categorySchema.omit({ id: true })
