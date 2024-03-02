@@ -44,6 +44,17 @@ const schema = z
       logging: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
+
+    s3config: z.object({
+      clientConfig: z.object({
+        region: z.string().trim().min(1),
+        credentials: z.object({
+          accessKeyId: z.string().trim().min(1),
+          secretAccessKey: z.string().trim().min(1),
+        }),
+      }),
+      bucket: z.string().trim().min(1),
+    }),
   })
   .readonly()
 
@@ -67,6 +78,17 @@ const config = schema.parse({
     password: env.DB_PASSWORD,
     logging: env.DB_LOGGING,
     synchronize: env.DB_SYNC,
+  },
+
+  s3config: {
+    clientConfig: {
+      region: process.env.AWS_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    },
+    bucket: process.env.AWS_BUCKET_NAME,
   },
 })
 
