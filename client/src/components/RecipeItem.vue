@@ -37,6 +37,7 @@ function dragEndHandler() {
     :draggable="isDraggable"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
+    :data-testid="`${$props.item.componentType}-item`"
   >
     This is a single recipe item
     <div class="insert" @mouseenter="toggleDrag" @mouseleave="toggleDrag">

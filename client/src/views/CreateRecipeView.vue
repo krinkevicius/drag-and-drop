@@ -65,18 +65,23 @@ function list() {
   <div class="admin">
     <div class="sidebar">
       000
-      <div v-for="(icon, index) in icons" :key="index">
+      <div class="icon-wrapper" v-for="(icon, index) in icons" :key="index">
         <RecipeIcon :itemType="icon" />
       </div>
     </div>
     <div class="main-area">
-      <!-- v-model and required? -->
-      <input label="Recipe Name" type="text" placeholder="Enter recipe name" />
-      <button>Create Recipe</button>
+      <input
+        label="Recipe Name"
+        type="text"
+        placeholder="Enter recipe name"
+        v-model="createRecipeStore.recipeName"
+      />
+      <button @click="createRecipeStore.createRecipe">Create Recipe</button>
       <div
         class="dropzone"
         @dragover.prevent="dragOverHandler($event)"
         @drop="onDropHandler($event)"
+        data-testid="dropzone"
       >
         <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
         <div
@@ -106,6 +111,9 @@ function list() {
   height: 100vh;
   border: 2px solid red;
   padding: 20px;
+}
+.icon-wrapper {
+  padding: 0px;
 }
 
 .main-area {
