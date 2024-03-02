@@ -9,7 +9,7 @@ import {
 } from 'typeorm'
 import { validates } from '@server/utils/validation'
 import { z } from 'zod'
-import { Category, Description, Image } from '.'
+import { Category, Description, Image, IngredientList } from '.'
 
 @Entity()
 export class Recipe {
@@ -29,12 +29,26 @@ export class Recipe {
   @OneToMany(() => Image, (image) => image.recipe)
   images: Image[]
 
-  @ManyToMany(() => Category, (category) => category.recipes)
+  @OneToMany(() => IngredientList, (ingredientList) => ingredientList.recipe)
+  ingredientLists: IngredientList[]
+
+  @ManyToMany(() => Category, (category) => category.recipes, {
+    cascade: ['insert', 'update'],
+  })
   @JoinTable()
   categories: Category[]
 }
 
-export type RecipeBare = Omit<Recipe, 'descriptions' | 'images' | 'categories'>
+export type RecipeBare = Omit<
+  Recipe,
+  'descriptions' | 'images' | 'ingredientLists' | 'categories'
+>
+
+export enum Item {
+  ImageItem = 'image',
+}
+
+export type ItemType = `${Item}`
 
 export const recipeSchema = validates<RecipeBare>().with({
   id: z.number().int().positive(),
