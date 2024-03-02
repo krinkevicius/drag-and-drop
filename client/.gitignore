@@ -26,8 +26,9 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-src/config.ts
-e2e
+.env
+e2e/utils
+e2e/user.test.ts
 
 test-results/
 playwright-report/
