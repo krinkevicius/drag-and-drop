@@ -1,4 +1,5 @@
-import { AuthUser, authUserSchema } from '@server/entities/user'
+import { authUserSchema } from '@server/entities/user'
+import type { AuthUser } from '@server/entities/user'
 import z from 'zod'
 
 // We have move out the token payload logic into a separate file.

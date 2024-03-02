@@ -1,8 +1,5 @@
-import {
-  Description,
-  DescriptionBare,
-  descriptionSchema,
-} from '@server/entities/description'
+import { Description, descriptionSchema } from '@server/entities/description'
+import type { DescriptionBare } from '@server/entities/description'
 import { DataSource, EntityManager } from 'typeorm'
 
 export default async function createDescription(

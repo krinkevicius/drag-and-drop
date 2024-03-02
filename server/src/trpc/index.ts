@@ -1,6 +1,6 @@
 import { initTRPC } from '@trpc/server'
 import type { Request, Response } from 'express'
-import { Database } from '@server/database'
+import type { Database } from '@server/database'
 import type { AuthUser } from '@server/entities/user'
 import SuperJSON from 'superjson'
 
