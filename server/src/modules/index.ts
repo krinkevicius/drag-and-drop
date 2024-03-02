@@ -1,12 +1,16 @@
 import { router } from '../trpc'
 import user from './user'
 import recipe from './recipe'
-import description from './description'
+import image from './image'
+import category from './category'
+import ingredient from './ingredient'
 
 export const appRouter = router({
   user,
   recipe,
-  description,
+  image,
+  category,
+  ingredient,
 })
 
 export type AppRouter = typeof appRouter

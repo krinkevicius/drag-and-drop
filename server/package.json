@@ -14,12 +14,13 @@
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest",
-    "typecheck": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@aws-sdk/types": "^3.511.0",
     "@tsconfig/node18": "^18.2.2",
     "@types/bcrypt": "^5.0.2",
     "@types/chance": "^1.1.6",
@@ -29,6 +30,7 @@
     "@types/lodash": "^4.14.201",
     "@types/node": "^20.11.17",
     "@types/supertest": "^2.0.15",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "@vitest/coverage-v8": "^0.34.6",
@@ -44,6 +46,8 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
+    "@aws-sdk/s3-request-presigner": "^3.514.0",
     "@trpc/server": "^10.45.1",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^8.0.0",
@@ -59,6 +63,7 @@
     "ts-node": "^10.9.1",
     "typeorm": "^0.3.17",
     "typeorm-naming-strategies": "^4.1.0",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4",
     "zod-validation-error": "^2.1.0"
   },
