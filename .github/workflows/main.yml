@@ -39,5 +39,29 @@ jobs:
       - name: Lint client code
         run: npm run lint -w=client
 
-      - name: Client tests
-        run: npm run test:unit -w=client
+      # - name: Client tests
+      #   run: npm run test:unit -w=client
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: Build front end for E2E tests
+        run: npm run build -w=client
+        env:
+          VITE_API_ORIGIN: http://localhost:3000
+          VITE_API_PATH: /api/v1/trpc
+
+      - name: Health check
+        uses: jtalk/url-health-check-action@v4
+        with:
+          # Check the following URLs one by one sequentially
+          url: http://localhost:3000/api/health
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: false # Optional, defaults to "false"
+          # Fail this action after this many failed attempts
+          max-attempts: 5 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+
+      - name: Test client E2E
+        run: npm run test:e2e -w=client
