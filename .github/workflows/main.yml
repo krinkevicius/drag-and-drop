@@ -41,6 +41,8 @@ jobs:
 
       - name: Server tests
         run: npm run test -w=server
+        env:
+          TOKEN_KEY: ${{secrets.TOKEN_KEY}}
 
       # - name: Client tests
       #   run: npm run test:unit -w=client
