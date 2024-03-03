@@ -13,7 +13,6 @@ const pathToIcon = `src/assets/${props.itemType}.svg`
 
 function dragStartHandler() {
   dragDataStore.dragData = { dragType: 'icon', dragValue: props.itemType }
-  console.log(`dragstart sees dragValue as ${dragDataStore.dragData.dragValue}`)
 }
 
 function dragEndHandler() {
@@ -28,7 +27,7 @@ function dragEndHandler() {
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
     :style="{ backgroundImage: `url(${pathToIcon})` }"
-    :data-testid="`draggable-${itemType}-icon`"
+    :data-testid="`draggable-${props.itemType}-icon`"
   ></div>
 </template>
 
