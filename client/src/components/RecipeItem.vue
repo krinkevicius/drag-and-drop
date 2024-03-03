@@ -4,12 +4,14 @@ import type { PropType } from 'vue'
 import { RecipeItems } from '@/consts'
 import { ref } from 'vue'
 import { useCreateRecipeStore } from '@/stores/createRecipe'
+import { useDragDataStore } from '@/stores/dragData'
 
 const props = defineProps({
   item: { type: Object as PropType<ItemRecord>, required: true },
 })
 
-const store = useCreateRecipeStore()
+const recipeStore = useCreateRecipeStore()
+const dragDataStore = useDragDataStore()
 
 const isDraggable = ref(true)
 const isDragged = ref(false)
@@ -18,15 +20,15 @@ function toggleDrag() {
   isDraggable.value = !isDraggable.value
 }
 
-function dragStartHandler(event: DragEvent) {
+function dragStartHandler() {
   isDragged.value = true
-  const index = store.recipeItems.findIndex((item) => item === props.item)
-  event.dataTransfer!.setData('dataFromItem', index.toString())
+  const index = recipeStore.recipeItems.findIndex((item) => item === props.item)
+  dragDataStore.dragData = { dragType: 'item', dragValue: index }
 }
 
 function dragEndHandler() {
   isDragged.value = false
-  store.resetInsertIndex()
+  dragDataStore.resetDragData()
 }
 </script>
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import { RecipeItems } from '@/consts'
-import { useCreateRecipeStore } from '@/stores/createRecipe'
+import { useDragDataStore } from '@/stores/dragData'
 
-const store = useCreateRecipeStore()
+const dragDataStore = useDragDataStore()
 
 const props = defineProps({
   itemType: { type: String as PropType<keyof typeof RecipeItems>, required: true },
@@ -11,14 +11,13 @@ const props = defineProps({
 
 const pathToIcon = `src/assets/${props.itemType}.svg`
 
-function dragStartHandler(event: DragEvent) {
-  event.dataTransfer!.setData('dataFromIcon', props.itemType)
-  console.log(`event data is ${event.dataTransfer!.getData('dataFromIcon')}`)
+function dragStartHandler() {
+  dragDataStore.dragData = { dragType: 'icon', dragValue: props.itemType }
+  console.log(`dragstart sees dragValue as ${dragDataStore.dragData.dragValue}`)
 }
 
 function dragEndHandler() {
-  console.log('Icon is resetting the index')
-  store.resetInsertIndex()
+  dragDataStore.resetDragData()
 }
 </script>
 
@@ -26,7 +25,7 @@ function dragEndHandler() {
   <div
     class="item-icon"
     draggable="true"
-    @dragstart="dragStartHandler($event)"
+    @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
     :style="{ backgroundImage: `url(${pathToIcon})` }"
     :data-testid="`draggable-${itemType}-icon`"

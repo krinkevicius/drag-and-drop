@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { RecipeItems } from '@/consts'
-import { trpc } from '@/trpc'
+import { v4 as uuidv4 } from 'uuid'
+// import { trpc } from '@/trpc'
 
 export type ItemRecord = {
   id: string
@@ -13,7 +14,7 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
   const recipeItems = ref<ItemRecord[]>([])
 
   function createNewItem(componentType: keyof typeof RecipeItems): ItemRecord {
-    const id = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '')
+    const id = uuidv4()
     const data = { ...RecipeItems[componentType].data }
     return { id, componentType, data }
   }
@@ -28,30 +29,21 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
 
   function moveItem(fromIndex: number, toIndex: number | undefined) {
     if (toIndex === undefined) return
-    console.log('moving items')
     const itemToMove = recipeItems.value.filter((item) => item.componentType !== 'help')[fromIndex]
-    console.log(itemToMove)
 
     // ItemRecord with componentType "help" will be present thus the fromIndex needs to be recalculated:
 
     const adjustedFromIndex = recipeItems.value.findIndex((item) => item.id === itemToMove.id)
-    console.log(`New movement should be done from ${adjustedFromIndex} to ${toIndex}`)
 
     recipeItems.value.splice(toIndex, 0, recipeItems.value.splice(adjustedFromIndex, 1)[0])
   }
 
-  const itemInsertIndex = ref<number | undefined>(undefined)
-
-  watch(itemInsertIndex, (newValue) => {
+  function updatePlaceholderItem(index: number | undefined) {
     recipeItems.value = recipeItems.value.filter((item) => item.componentType !== 'help')
 
-    if (newValue !== undefined) {
-      addToItems(createNewItem('help'), newValue)
+    if (index !== undefined) {
+      addToItems(createNewItem('help'), index)
     }
-  })
-
-  function resetInsertIndex() {
-    itemInsertIndex.value = undefined
   }
 
   const recipeName = ref('')
@@ -64,7 +56,7 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
       return
     }
     console.log('recipe should be created')
-    const itemIds = filteredItems.map((item) => item.id)
+    // const itemIds = filteredItems.map((item) => item.id)
   }
 
   return {
@@ -72,8 +64,9 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     createNewItem,
     addToItems,
     moveItem,
-    itemInsertIndex,
-    resetInsertIndex,
+    updatePlaceholderItem,
+    // itemInsertIndex,
+    // resetInsertIndex,
     recipeName,
     createRecipe,
   }

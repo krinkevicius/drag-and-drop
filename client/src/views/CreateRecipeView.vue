@@ -2,6 +2,7 @@
 import RecipeIcon from '@/components/RecipeIcon.vue'
 import RecipeItem from '@/components/RecipeItem.vue'
 import { useCreateRecipeStore } from '@/stores/createRecipe'
+import { useDragDataStore } from '@/stores/dragData'
 import { RecipeItems } from '@/consts'
 import { ref } from 'vue'
 
@@ -13,14 +14,15 @@ type ClosestItem = {
 const icons = ref<(keyof typeof RecipeItems)[]>(['image', 'description', 'list', 'categories'])
 
 const createRecipeStore = useCreateRecipeStore()
+const dragDataStore = useDragDataStore()
 
 function dragOverHandler(event: DragEvent) {
-  if (
-    !event.dataTransfer!.getData('dataFromIcon') &&
-    !event.dataTransfer!.getData('dataFromItem')
-  ) {
+  if (!dragDataStore.dragData) {
     return
   }
+
+  console.log(`dragover sees dragValue as ${dragDataStore.dragData.dragValue}`)
+
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
   const itemWrappers = [...document.querySelectorAll('.item-wrapper')]
@@ -39,20 +41,29 @@ function dragOverHandler(event: DragEvent) {
   ).element
 
   const closestItemIndex = itemWrappers.findIndex((item) => item === closestItem)
-  const dataFromItem = parseInt(event.dataTransfer!.getData('dataFromItem'))
-  if (closestItemIndex !== dataFromItem && closestItemIndex !== dataFromItem + 1) {
-    createRecipeStore.itemInsertIndex = closestItemIndex
+
+  const testDataFromItem =
+    dragDataStore.dragData.dragType === 'item' ? dragDataStore.dragData.dragValue : NaN
+
+  if (closestItemIndex !== testDataFromItem && closestItemIndex !== testDataFromItem + 1) {
+    dragDataStore.itemInsertIndex = closestItemIndex
   }
 }
 
-function onDropHandler(event: DragEvent) {
-  const dataFromIcon = event.dataTransfer!.getData('dataFromIcon') as keyof typeof RecipeItems
-  const dataFromItem = event.dataTransfer!.getData('dataFromItem') as `${number}`
-  if (dataFromIcon) {
-    const newItem = createRecipeStore.createNewItem(dataFromIcon)
-    createRecipeStore.addToItems(newItem, createRecipeStore.itemInsertIndex!)
-  } else if (dataFromItem) {
-    createRecipeStore.moveItem(parseInt(dataFromItem, 10), createRecipeStore.itemInsertIndex)
+function onDropHandler() {
+  if (!dragDataStore.dragData) {
+    return
+  }
+  console.log('drop!')
+  console.log(`dragValue = ${dragDataStore.dragData.dragValue}`)
+
+  if (dragDataStore.dragData.dragType === 'icon') {
+    const newItem = createRecipeStore.createNewItem(
+      dragDataStore.dragData.dragValue as keyof typeof RecipeItems
+    )
+    createRecipeStore.addToItems(newItem, dragDataStore.itemInsertIndex!)
+  } else if (dragDataStore.dragData.dragType === 'item') {
+    createRecipeStore.moveItem(dragDataStore.dragData.dragValue, dragDataStore.itemInsertIndex)
   }
 }
 
@@ -80,7 +91,7 @@ function list() {
       <div
         class="dropzone"
         @dragover.prevent="dragOverHandler($event)"
-        @drop="onDropHandler($event)"
+        @drop="onDropHandler"
         data-testid="dropzone"
       >
         <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
@@ -113,7 +124,7 @@ function list() {
   padding: 20px;
 }
 .icon-wrapper {
-  padding: 0px;
+  padding: 20px;
 }
 
 .main-area {
