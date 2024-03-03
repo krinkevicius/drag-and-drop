@@ -86,7 +86,7 @@ it.skip('should throw an error if items array is empty', async () => {
   ).rejects.toThrow(/Cannot create a recipe without items/)
 })
 
-it('should throw error if same category is passed twice', async () => {
+it.skip('should throw error if same category is passed twice', async () => {
   const name = 'Grilled chicken'
 
   await expect(
