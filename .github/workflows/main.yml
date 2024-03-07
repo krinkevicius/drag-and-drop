@@ -43,6 +43,14 @@ jobs:
         run: npm run test:db -w=server
         env:
           TOKEN_KEY: ${{secrets.TOKEN_KEY}}
+          DB_NAME: ${{secrets.DB_NAME}}
+          DB_USER: ${{secrets.DB_USER}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+
+          AWS_REGION: ${{secrets.AWS_REGION}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       # - name: Client tests
       #   run: npm run test:unit -w=client

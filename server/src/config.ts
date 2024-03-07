@@ -45,16 +45,16 @@ const schema = z
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
 
-    // s3config: z.object({
-    //   clientConfig: z.object({
-    //     region: z.string().trim().min(1),
-    //     credentials: z.object({
-    //       accessKeyId: z.string().trim().min(1),
-    //       secretAccessKey: z.string().trim().min(1),
-    //     }),
-    //   }),
-    //   bucket: z.string().trim().min(1),
-    // }),
+    s3config: z.object({
+      clientConfig: z.object({
+        region: z.string().trim().min(1),
+        credentials: z.object({
+          accessKeyId: z.string().trim().min(1),
+          secretAccessKey: z.string().trim().min(1),
+        }),
+      }),
+      bucket: z.string().trim().min(1),
+    }),
   })
   .readonly()
 
