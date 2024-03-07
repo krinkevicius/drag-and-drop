@@ -9,9 +9,9 @@ jobs:
       postgres:
         image: postgres:16.1-alpine
         env:
-          POSTGRES_USER: turing
-          POSTGRES_PASSWORD: turing
-          POSTGRES_DB: testdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: drag
         ports:
           - 5432:5432
     steps:
