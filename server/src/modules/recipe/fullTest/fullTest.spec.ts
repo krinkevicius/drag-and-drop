@@ -10,7 +10,7 @@ const authUser = fakeUser({ role: UserRoles.Admin })
 
 const { fullTest } = createCallerFactory(recipeRouter)({ db, authUser })
 
-it.skip('should save a new recipe in the database', async () => {
+it('should save a new recipe in the database', async () => {
   const { id } = await fullTest({
     name: 'Beetroot soup',
     items: [
@@ -77,7 +77,7 @@ it.skip('should throw an error when trying to save a recipe with already existin
   ).rejects.toThrow(/Recipe with this name already exists/)
 })
 
-it.skip('should throw an error if items array is empty', async () => {
+it('should throw an error if items array is empty', async () => {
   await expect(
     fullTest({
       name: 'Beetroot salad',
@@ -86,7 +86,7 @@ it.skip('should throw an error if items array is empty', async () => {
   ).rejects.toThrow(/Cannot create a recipe without items/)
 })
 
-it.skip('should throw error if same category is passed twice', async () => {
+it('should throw error if same category is passed twice', async () => {
   const name = 'Grilled chicken'
 
   await expect(

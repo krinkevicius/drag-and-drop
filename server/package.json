@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsc --rootDir src && tsc-alias",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-    "start": "node ./dist/index.js",
+    "start": "node --loader ./loader.js ./dist/index.js",
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
-    "test:db": "vitest",
+    "test:db": "vitest --no-file-parallelism --maxWorkers 1",
     "type-check": "tsc --noEmit"
   },
   "keywords": [],
@@ -40,10 +41,11 @@
     "pg-mem": "^2.7.1",
     "prettier": "^3.0.3",
     "supertest": "^6.3.3",
+    "tsc-alias": "^1.8.8",
     "tsup": "^7.2.0",
     "tsx": "^3.13.0",
-    "typescript": "^5.2.2",
-    "vitest": "^0.34.6"
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.511.0",

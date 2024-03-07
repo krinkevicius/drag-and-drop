@@ -45,7 +45,7 @@ function createMemoryDatabase(): DataSource {
 }
 
 function relative(...paths: string[]) {
-  return join(__dirname, ...paths)
+  return join(import.meta.url, ...paths)
 }
 
 export type Database = DataSource
