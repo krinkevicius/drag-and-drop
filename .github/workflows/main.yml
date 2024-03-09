@@ -63,13 +63,13 @@ jobs:
 
       - name: Start server for E2E tests
         run: npm run dev -w=server &
-        env:
-          # Pass the same database credentials to our server environment variables,
-          # just like we would if we had an .env file.
-          # These credentials are not secret, so we can commit them to our repository.
-          # DB_USER: turing
-          # DB_PASSWORD: turing
-          # DB_NAME: testdb
+        # env:
+        # Pass the same database credentials to our server environment variables,
+        # just like we would if we had an .env file.
+        # These credentials are not secret, so we can commit them to our repository.
+        # DB_USER: turing
+        # DB_PASSWORD: turing
+        # DB_NAME: testdb
         env:
           TOKEN_KEY: ${{secrets.TOKEN_KEY}}
           DB_NAME: ${{secrets.DB_NAME}}
