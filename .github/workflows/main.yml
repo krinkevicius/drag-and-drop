@@ -67,9 +67,19 @@ jobs:
           # Pass the same database credentials to our server environment variables,
           # just like we would if we had an .env file.
           # These credentials are not secret, so we can commit them to our repository.
-          DB_USER: turing
-          DB_PASSWORD: turing
-          DB_NAME: testdb
+          # DB_USER: turing
+          # DB_PASSWORD: turing
+          # DB_NAME: testdb
+        env:
+          TOKEN_KEY: ${{secrets.TOKEN_KEY}}
+          DB_NAME: ${{secrets.DB_NAME}}
+          DB_USER: ${{secrets.DB_USER}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+
+          AWS_REGION: ${{secrets.AWS_REGION}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
           # port to start the server on
           PORT: 3000
