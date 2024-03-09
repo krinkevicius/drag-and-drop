@@ -67,6 +67,18 @@ jobs:
       - name: Test client E2E
         run: npm run test:e2e -w=client
 
+      - name: Health check
+        uses: jtalk/url-health-check-action@v4
+        with:
+          # Check the following URLs one by one sequentially
+          url: http://localhost:3000/api/health
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: false # Optional, defaults to "false"
+          # Fail this action after this many failed attempts
+          max-attempts: 5 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
