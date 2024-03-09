@@ -58,8 +58,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox
 
-      - name: Build server
-        run: npm run build -w=server
+      # - name: Build server
+      #   run: npm run build -w=server
 
       - name: Start server for E2E tests
         run: npm run start -w=server &
