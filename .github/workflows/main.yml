@@ -58,6 +58,19 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox
 
+      - name: Start server for E2E tests
+        run: npm run start -w=server &
+        env:
+          # Pass the same database credentials to our server environment variables,
+          # just like we would if we had an .env file.
+          # These credentials are not secret, so we can commit them to our repository.
+          DB_USER: turing
+          DB_PASSWORD: turing
+          DB_NAME: testdb
+
+          # port to start the server on
+          PORT: 3000
+
       - name: Build front end for E2E tests
         run: npm run build -w=client
         env:
