@@ -16,7 +16,7 @@ export default function createApp(db: Database) {
 
   // Endpoint for health checks - pinging the server to see if it's alive.
   // This can be used by tests, load balancers, monitoring tools, etc.
-  app.use('/health', (_, res) => {
+  app.use('/api/health', (_, res) => {
     res.status(200).send('OK')
   })
 
