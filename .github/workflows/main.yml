@@ -194,7 +194,11 @@ jobs:
                 "DB_NAME": "${{ secrets.PROD_DB_NAME }}",
                 "DB_USER": "${{ secrets.PROD_DB_USER }}",
                 "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}",
-                "TOKEN_KEY": "${{ secrets.TOKEN_KEY }}"
+                "TOKEN_KEY": "${{ secrets.TOKEN_KEY }}",
+                "AWS_REGION": "${{vars.AWS_REGION}}",
+                "AWS_BUCKET_NAME": "${{secrets.AWS_BUCKET_NAME}}",
+                "AWS_BUCKET_ACCESS_KEY": "${{secrets.AWS_BUCKET_ACCESS_KEY}}",
+                "AWS_BUCKET_SECRET_ACCESS_KEY": "${{secrets.AWS_BUCKET_SECRET_ACCESS_KEY}}",
               }
             }
           }' > containers.json
