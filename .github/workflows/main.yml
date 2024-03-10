@@ -42,7 +42,7 @@ jobs:
       - name: Test server
         run: npm run test:db -w=server
         env:
-          # TOKEN_KEY: ${{secrets.TOKEN_KEY}}
+          TOKEN_KEY: ${{secrets.TOKEN_KEY}}
           DB_NAME: testdb
           DB_USER: postgres
           DB_PASSWORD: postgres
@@ -61,7 +61,7 @@ jobs:
       - name: Start dev server for E2E tests
         run: npm run dev -w=server &
         env:
-          # TOKEN_KEY: ${{secrets.TOKEN_KEY}}
+          TOKEN_KEY: ${{secrets.TOKEN_KEY}}
           DB_NAME: testdb
           DB_USER: postgres
           DB_PASSWORD: postgres
