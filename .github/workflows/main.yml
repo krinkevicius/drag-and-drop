@@ -94,6 +94,7 @@ jobs:
       - name: Test client E2E
         run: npm run test:e2e -w=client
 
+        # Generate playwright report
       - uses: actions/upload-artifact@v3
         if: always()
         with:
