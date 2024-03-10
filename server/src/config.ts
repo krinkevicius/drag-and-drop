@@ -41,6 +41,7 @@ const schema = z
       password: isInMemory ? z.string().optional() : z.string(),
 
       // By default, log and synchronize the database schema only for tests and development.
+      ssl: z.preprocess(coerceBoolean, z.boolean().default(false)),
       logging: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
@@ -78,6 +79,7 @@ const config = schema.parse({
     password: env.DB_PASSWORD,
     logging: env.DB_LOGGING,
     synchronize: env.DB_SYNC,
+    ssl: env.DB_SSL,
   },
 
   s3config: {

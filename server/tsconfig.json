@@ -1,6 +1,5 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
-  "exclude": ["src/**/*.spec.ts", "tests/**/*.ts"],
 
   "compilerOptions": {
     "baseUrl": ".",
