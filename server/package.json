@@ -61,6 +61,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "pg": "^8.11.3",
+    "pino": "^8.19.0",
     "superjson": "^2.2.1",
     "ts-node": "^10.9.1",
     "typeorm": "^0.3.17",
