@@ -12,6 +12,7 @@ async function sendToBE() {
     errorMessage.value = ''
     await trpc.user.errors.query(textToBE.value)
   } catch (error) {
+    console.log(error)
     if (error instanceof TRPCClientError) {
       // if (error.shape.data.report) {
       //   Sentry.captureException(error)
