@@ -47,7 +47,7 @@ export default function createApp(db: Database) {
   // Using TRPC router, which will live under /v1/trpc
   // path. It will be used for all our procedures.
   app.use(
-    '/v1/trpc',
+    '/api/v1/trpc',
     createExpressMiddleware({
       // Created context for each request, which we will be able to
       // access in our procedures.
