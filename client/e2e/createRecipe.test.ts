@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test('correct items are shown after dragging icons', async ({ page, browserName }) => {
-  await page.goto('/')
+  await page.goto('/dashboard')
 
   // Only icons should be visible
   const imageIcon = page.getByTestId('draggable-image-icon')
@@ -28,7 +28,6 @@ test('correct items are shown after dragging icons', async ({ page, browserName 
   // playwright & chromium does not perform first drag and drop action correctly
   // exit test case early
   if (browserName === 'chromium') {
-    console.log('this is chrome')
     return
   }
 
