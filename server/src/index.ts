@@ -9,8 +9,6 @@ database.initialize().then(() => {
   const app = createApp(database)
 
   app.listen(config.port, () => {
-    logger.info(
-      `Logger says server is running at http://localhost:${config.port}`
-    )
+    logger.info(`Server is running at http://localhost:${config.port}`)
   })
 })

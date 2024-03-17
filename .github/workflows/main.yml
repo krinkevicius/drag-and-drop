@@ -198,7 +198,8 @@ jobs:
                 "AWS_REGION": "${{vars.AWS_REGION}}",
                 "AWS_BUCKET_NAME": "${{secrets.AWS_BUCKET_NAME}}",
                 "AWS_BUCKET_ACCESS_KEY": "${{secrets.AWS_BUCKET_ACCESS_KEY}}",
-                "AWS_BUCKET_SECRET_ACCESS_KEY": "${{secrets.AWS_BUCKET_SECRET_ACCESS_KEY}}"
+                "AWS_BUCKET_SECRET_ACCESS_KEY": "${{secrets.AWS_BUCKET_SECRET_ACCESS_KEY}}",
+                "SENTRY_SERVER_DSN": "${{secrets.SENTRY_SERVER_DSN}}"
               }
             }
           }' > containers.json

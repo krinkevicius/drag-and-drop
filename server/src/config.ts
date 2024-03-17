@@ -56,6 +56,10 @@ const schema = z
       }),
       bucket: z.string().trim().min(1),
     }),
+
+    sentryServerDSN: isDevTest
+      ? z.string().optional()
+      : z.string().trim().min(1),
   })
   .readonly()
 
@@ -92,6 +96,8 @@ const config = schema.parse({
     },
     bucket: process.env.AWS_BUCKET_NAME,
   },
+
+  sentryServerDSN: env.SENTRY_SERVER_DSN,
 })
 
 export default config
