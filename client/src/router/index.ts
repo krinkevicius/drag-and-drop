@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import CreateRecipeView from '@/views/CreateRecipeView.vue'
-import HomeView from '@/views/HomeView.vue'
+import { authenticate, authenticateAdmin } from './guards'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,12 +7,19 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/dashboard',
       name: 'CreateRecipe',
-      component: CreateRecipeView,
+      component: () => import('../views/CreateRecipeView.vue'),
+      beforeEnter: [authenticateAdmin],
+    },
+    {
+      path: '/favorites',
+      name: 'FavoriteRecipes',
+      component: () => import('../views/FavoriteRecipes.vue'),
+      beforeEnter: [authenticate],
     },
   ],
 })

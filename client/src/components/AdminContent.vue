@@ -6,7 +6,7 @@ const userStore = useUserStore()
 
 <template>
   <div v-if="userStore.userRole === 'admin'">
-    <slot></slot>
+    <slot name="adminContent"></slot>
   </div>
 </template>
 

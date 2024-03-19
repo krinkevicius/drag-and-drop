@@ -4,16 +4,12 @@ import { useUserStore } from '@/stores/users'
 import type { UserLogin, UserSignup } from '@/stores/users'
 import { withError } from '@/composables/useErrorHandling'
 
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import AuthenticatedContent from '@/components/AuthenticatedContent.vue'
 import AdminContent from '@/components/AdminContent.vue'
 
-// const router = useRouter()
+const router = useRouter()
 const userStore = useUserStore()
-
-// function routeToFavorites() {
-//   router.push({ name: 'FavoriteRecipes' })
-// }
 
 // function routeToSignup() {
 //   router.push({ name: 'SignUp' })
@@ -34,9 +30,9 @@ const submitLogin = withError(async () => {
   await userStore.login(loginForm.value)
 
   togglePopup()
-  /*
-  Redirect to dashboard if admin user
-  */
+  if (userStore.userRole === 'admin') {
+    router.push({ name: 'CreateRecipe' })
+  }
 }, errorMessage)
 
 const signupSuccess = ref<boolean>(false)
@@ -73,10 +69,27 @@ function togglePopup(open?: boolean) {
       <div>
         User is logged in
         <AdminContent>
-          <template>
-            <button>Dashboard</button>
+          <template #adminContent>
+            <button
+              @click="
+                () => {
+                  router.push({ name: 'CreateRecipe' })
+                }
+              "
+            >
+              Dashboard
+            </button>
           </template>
         </AdminContent>
+        <button
+          @click="
+            () => {
+              router.push({ name: 'FavoriteRecipes' })
+            }
+          "
+        >
+          My favorites
+        </button>
         <button @click="userStore.logout">Log Out</button>
       </div>
     </template>
