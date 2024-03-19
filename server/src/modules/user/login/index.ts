@@ -1,7 +1,7 @@
 import config from '@server/config'
 import { publicProcedure } from '@server/trpc'
 import { User, userSchema } from '@server/entities/user'
-import { TRPCError } from '@trpc/server'
+import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import { prepareTokenPayload } from '../tokenPayload'
@@ -33,7 +33,7 @@ export default publicProcedure
     })
 
     if (!user) {
-      throw new TRPCError({
+      throw new ExpectedTRPCError({
         code: 'UNAUTHORIZED',
         message: 'User with this email could not be found!',
       })
@@ -42,7 +42,7 @@ export default publicProcedure
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
 
     if (!isPasswordCorrect) {
-      throw new TRPCError({
+      throw new ExpectedTRPCError({
         code: 'UNAUTHORIZED',
         message: 'Incorrect password! Please try again.',
       })

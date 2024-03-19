@@ -2,7 +2,7 @@ import { publicProcedure } from '@server/trpc'
 import { User, userInsertSchema, UserRoles } from '@server/entities/user'
 import bcrypt from 'bcrypt'
 import config from '@server/config'
-import { TRPCError } from '@trpc/server'
+import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 
 export default publicProcedure
   .input(userInsertSchema)
@@ -26,13 +26,13 @@ export default publicProcedure
         throw error
       }
       if (error.message.match(/duplicate key.*[\r\n]?.*email/)) {
-        throw new TRPCError({
+        throw new ExpectedTRPCError({
           code: 'BAD_REQUEST',
           message: 'User with this email already exists',
         })
       }
       if (error.message.match(/duplicate key.*[\r\n]?.*username/)) {
-        throw new TRPCError({
+        throw new ExpectedTRPCError({
           code: 'BAD_REQUEST',
           message: 'User with this username already exists',
         })

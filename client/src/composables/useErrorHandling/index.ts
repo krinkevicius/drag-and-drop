@@ -24,15 +24,5 @@ async function handleError(fn: Function, errorMessageRef: Ref<string>) {
       errorMessageRef.value = error.message
       Sentry.captureException(error)
     }
-
-    // if (!(error instanceof Error)) {
-    //   errorMessageRef.value = 'Something went wrong.'
-    //   Sentry.captureException(error)
-    // } else if (!(error instanceof TRPCClientError)) {
-    //   errorMessageRef.value = error.message
-    //   Sentry.captureException(error)
-    // } else {
-    //   errorMessageRef.value = error.data.message || error.message
-    // }
   }
 }
