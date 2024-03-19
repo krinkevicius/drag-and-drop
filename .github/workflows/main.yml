@@ -52,8 +52,8 @@ jobs:
           AWS_BUCKET_ACCESS_KEY: ${{secrets.AWS_BUCKET_ACCESS_KEY}}
           AWS_BUCKET_SECRET_ACCESS_KEY: ${{secrets.AWS_BUCKET_SECRET_ACCESS_KEY}}
 
-      # - name: Test client (unit)
-      #   run: npm run test:unit -w=client
+      - name: Test client (unit)
+        run: npm run test:unit -w=client
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox
