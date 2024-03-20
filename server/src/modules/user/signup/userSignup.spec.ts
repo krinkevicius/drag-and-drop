@@ -20,6 +20,7 @@ it('should allow guest to signup with provided email, username and password', as
       email: true,
       password: true,
       username: true,
+      role: true,
     },
     where: {
       email: newUser.email,
@@ -31,6 +32,7 @@ it('should allow guest to signup with provided email, username and password', as
     email: newUser.email,
     password: expect.not.stringContaining(newUser.password),
     username: newUser.username,
+    role: 'registeredUser',
   })
 
   expect(userInDb.password).toHaveLength(60)
@@ -117,4 +119,21 @@ it('does not allow to signup with duplicate username', async () => {
   await expect(
     signup({ ...newUser, email: 'user69@domain.com' })
   ).rejects.toThrow(/User with this username already exists/)
+})
+
+it('allows to signup as admin, if admin boolean is passed', async () => {
+  const fakeAdmin = fakeUser()
+
+  await signup({ ...fakeAdmin, admin: true })
+
+  const adminInDb = await userRepository.findOneOrFail({
+    select: {
+      role: true,
+    },
+    where: {
+      email: fakeAdmin.email,
+    },
+  })
+
+  expect(adminInDb.role).toEqual('admin')
 })

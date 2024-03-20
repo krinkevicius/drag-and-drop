@@ -29,8 +29,6 @@ coverage
 .env
 
 e2e/dragAndDropChromium.test.ts
-e2e/utils
-e2e/user.test.ts
 
 test-results/
 playwright-report/

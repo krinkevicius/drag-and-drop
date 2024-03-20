@@ -90,7 +90,7 @@ function togglePopup(open?: boolean) {
         >
           My favorites
         </button>
-        <button @click="userStore.logout">Log Out</button>
+        <button @click="userStore.logout" data-testid="logoutButton">Log Out</button>
       </div>
     </template>
     <template #default>

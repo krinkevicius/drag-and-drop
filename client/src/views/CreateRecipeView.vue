@@ -5,6 +5,7 @@ import { useCreateRecipeStore } from '@/stores/createRecipe'
 import { useDragDataStore } from '@/stores/dragData'
 import { RecipeItems } from '@/consts'
 import { ref } from 'vue'
+import * as Sentry from '@sentry/vue'
 
 type ClosestItem = {
   offset: number
@@ -70,11 +71,26 @@ function onDropHandler() {
 function list() {
   console.log(createRecipeStore.recipeItems)
 }
+
+function throwError() {
+  try {
+    throw new Error('some error')
+  } catch (error) {
+    console.log(error)
+    Sentry.captureException(error)
+  }
+}
+
+function throwUncaughtError() {
+  throw new Error('uncaught error was thrown')
+}
 </script>
 
 <template>
   <div class="admin">
-    <div class="sidebar">
+    <div class="sidebar" data-testid="dashboardSidebar">
+      <button @click="throwError">Throw error</button>
+      <button @click="throwUncaughtError">Throw uncaught error</button>
       000
       <div class="icon-wrapper" v-for="(icon, index) in icons" :key="index">
         <RecipeIcon :itemType="icon" />

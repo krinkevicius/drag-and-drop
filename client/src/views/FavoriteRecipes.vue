@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div>This is Favorite recipes view</div>
+  <div data-testid="favoritesHeader">This is Favorite recipes view</div>
 </template>
 
 <style scoped></style>

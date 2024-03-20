@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test'
+import { loginNewUser } from 'utils/api'
 
 test('correct items are shown after dragging icons', async ({ page, browserName }) => {
+  // Login as admin user
+  await loginNewUser(page, true)
+
   await page.goto('/dashboard')
 
   // Only icons should be visible
