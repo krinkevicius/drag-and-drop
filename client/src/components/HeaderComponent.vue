@@ -60,9 +60,14 @@ function togglePopup(open?: boolean) {
     signupVisible.value = false
   }
 }
+
+function test() {
+  throw new Error('This is error in front end')
+}
 </script>
 
 <template>
+  <button @click="test">Test</button>
   <div>Welcome to Blue Kitchen!</div>
   <AuthenticatedContent>
     <template #authContent>

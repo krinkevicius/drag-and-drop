@@ -112,6 +112,7 @@ jobs:
     env:
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: /api/v1/trpc
+      SENTRY_CLIENT_DSN: ${{ secrets.SENTRY_CLIENT_DSN }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
     steps:
@@ -147,6 +148,7 @@ jobs:
           -t $CLIENT_IMAGE_TAG
           --build-arg VITE_API_ORIGIN=$API_ORIGIN
           --build-arg VITE_API_PATH=$API_PATH
+          --build-arg VITE_SENTRY_CLIENT_DSN=$SENTRY_CLIENT_DSN
           -f ./client/Dockerfile .
 
       - name: Push server image
