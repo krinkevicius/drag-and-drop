@@ -11,6 +11,10 @@ const userRepository = db.getRepository(User)
 
 const { login } = createCallerFactory(userRouter)({ db })
 
+afterAll(async () => {
+  await db.dropDatabase()
+})
+
 const registeredUser = fakeUser()
 
 // Save user with hashed password
