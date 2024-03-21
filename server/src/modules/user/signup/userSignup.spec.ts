@@ -9,6 +9,10 @@ const userRepository = db.getRepository(User)
 
 const { signup } = createCallerFactory(userRouter)({ db })
 
+afterAll(async () => {
+  await db.dropDatabase()
+})
+
 it('should allow guest to signup with provided email, username and password', async () => {
   const newUser = fakeUser()
 
