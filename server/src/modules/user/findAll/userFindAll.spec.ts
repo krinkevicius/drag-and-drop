@@ -27,10 +27,16 @@ it('should return all users', async () => {
     id: expect.any(Number),
     username: user1.username,
     role: 'registeredUser',
+    // Checking that email and password were not returned
+    email: undefined,
+    password: undefined,
   })
   expect(allUsers[1]).toEqual({
     id: expect.any(Number),
     username: user2.username,
     role: 'admin',
+    // Checking that email and password were not returned
+    email: undefined,
+    password: undefined,
   })
 })
