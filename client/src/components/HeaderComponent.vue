@@ -11,14 +11,6 @@ import AdminContent from '@/components/AdminContent.vue'
 const router = useRouter()
 const userStore = useUserStore()
 
-// function routeToSignup() {
-//   router.push({ name: 'SignUp' })
-// }
-
-// function routeToLogin() {
-//   router.push({ name: 'Login' })
-// }
-
 const errorMessage = ref<string>('')
 
 const loginForm = ref<UserLogin>({
@@ -58,6 +50,7 @@ function togglePopup(open?: boolean) {
   if (open === undefined) {
     loginVisible.value = false
     signupVisible.value = false
+    // signupSuccess reset???
   }
 }
 

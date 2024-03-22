@@ -10,7 +10,3 @@ if (typeof apiOrigin !== 'string') {
 if (typeof apiPath !== 'string') {
   throw new Error('VITE_API_PATH is not defined')
 }
-
-// if (typeof sentryDSN !== 'string') {
-//   throw new Error('VITE_SENTRY_CLIENT_DSN is not defined')
-// }

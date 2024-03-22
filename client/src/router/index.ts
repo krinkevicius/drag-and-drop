@@ -12,8 +12,20 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'CreateRecipe',
-      component: () => import('../views/CreateRecipeView.vue'),
+      component: () => import('../views/DashboardView.vue'),
       beforeEnter: [authenticateAdmin],
+      children: [
+        {
+          path: 'access-rights',
+          name: 'AccessRights',
+          component: () => import('../views/AccessRightsView.vue'),
+        },
+        {
+          path: 'new-recipe',
+          name: 'NewRecipe',
+          component: () => import('../views/NewRecipeView.vue'),
+        },
+      ],
     },
     {
       path: '/favorites',
