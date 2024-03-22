@@ -28,7 +28,7 @@ export class User {
   @Column('text', { select: false })
   password: string
 
-  @Column('text', { select: false })
+  @Column('text')
   role: string
 
   @ManyToMany(() => Recipe)

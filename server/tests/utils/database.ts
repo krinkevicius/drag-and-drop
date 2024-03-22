@@ -10,7 +10,7 @@ export async function createTestDatabase() {
   return db
 }
 
-export async function destroyTestDatabase(db: DataSource) {
+export async function dropTestDatabase(db: DataSource) {
   if (config.env === 'test' && config.database.type !== 'pg-mem') {
     await db.dropDatabase()
   }
