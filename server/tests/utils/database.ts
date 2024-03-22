@@ -1,6 +1,6 @@
 import { createDatabase } from '@server/database'
 import config from '@server/config'
-import type { DataSourceOptions } from 'typeorm'
+import type { DataSource, DataSourceOptions } from 'typeorm'
 
 export async function createTestDatabase() {
   const db = createDatabase(config.database as DataSourceOptions)
@@ -8,6 +8,12 @@ export async function createTestDatabase() {
   await db.initialize()
 
   return db
+}
+
+export async function destroyTestDatabase(db: DataSource) {
+  if (config.env === 'test' && config.database.type !== 'pg-mem') {
+    await db.dropDatabase()
+  }
 }
 
 export function createMockDatabase(repositories: any) {

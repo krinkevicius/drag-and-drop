@@ -1,4 +1,4 @@
-import { createTestDatabase } from '@tests/utils/database'
+import { createTestDatabase, destroyTestDatabase } from '@tests/utils/database'
 import { User } from '@server/entities'
 import { fakeUser } from '@server/entities/tests/fakes'
 import bcrypt from 'bcrypt'
@@ -12,7 +12,7 @@ const userRepository = db.getRepository(User)
 const { login } = createCallerFactory(userRouter)({ db })
 
 afterAll(async () => {
-  await db.dropDatabase()
+  await destroyTestDatabase(db)
 })
 
 const registeredUser = fakeUser()

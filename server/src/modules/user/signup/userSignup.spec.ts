@@ -1,5 +1,5 @@
 import { User } from '@server/entities'
-import { createTestDatabase } from '@tests/utils/database'
+import { createTestDatabase, destroyTestDatabase } from '@tests/utils/database'
 import { fakeUser } from '@server/entities/tests/fakes'
 import { createCallerFactory } from '@server/trpc'
 import userRouter from '..'
@@ -10,7 +10,7 @@ const userRepository = db.getRepository(User)
 const { signup } = createCallerFactory(userRouter)({ db })
 
 afterAll(async () => {
-  await db.dropDatabase()
+  await destroyTestDatabase(db)
 })
 
 it('should allow guest to signup with provided email, username and password', async () => {
