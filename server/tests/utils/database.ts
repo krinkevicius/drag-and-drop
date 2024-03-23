@@ -1,5 +1,5 @@
 import { createDatabase } from '@server/database'
-import config from '@server/config'
+import { config } from '@server/config'
 import type { DataSource, DataSourceOptions } from 'typeorm'
 
 export async function createTestDatabase() {

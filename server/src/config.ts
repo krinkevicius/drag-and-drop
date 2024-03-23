@@ -48,22 +48,29 @@ const schema = z
 
     s3config: z.object({
       clientConfig: z.object({
-        region: z.string().trim().min(1),
+        region: isDevTest
+          ? z.string().trim().min(1).optional()
+          : z.string().trim().min(1),
         credentials: z.object({
-          accessKeyId: z.string().trim().min(1),
-          secretAccessKey: z.string().trim().min(1),
+          accessKeyId: isDevTest
+            ? z.string().trim().min(1).optional()
+            : z.string().trim().min(1),
+          secretAccessKey: isDevTest
+            ? z.string().trim().min(1).optional()
+            : z.string().trim().min(1),
         }),
       }),
-      bucket: z.string().trim().min(1),
+      bucket: isDevTest
+        ? z.string().trim().min(1).optional()
+        : z.string().trim().min(1),
     }),
-
     sentryServerDSN: isDevTest
       ? z.string().optional()
       : z.string().trim().min(1),
   })
   .readonly()
 
-const config = schema.parse({
+export const config = schema.parse({
   env: env.NODE_ENV,
   port: env.PORT,
   isCi: env.CI,
@@ -100,8 +107,6 @@ const config = schema.parse({
   sentryServerDSN: env.SENTRY_SERVER_DSN,
 })
 
-export default config
-
 // utility functions
 function coerceBoolean(value: unknown) {
   if (typeof value === 'string') {
@@ -109,4 +114,11 @@ function coerceBoolean(value: unknown) {
   }
 
   return undefined
+}
+
+export const isDefined = (value: object | string): boolean => {
+  if (typeof value === 'object' && value !== null) {
+    return Object.values(value).every((v) => isDefined(v))
+  }
+  return value !== undefined && value !== ''
 }

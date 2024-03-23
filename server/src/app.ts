@@ -9,7 +9,7 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node'
 import type { Database } from './database'
 import { appRouter } from './modules'
 import type { Context } from './trpc'
-import config from './config'
+import { config } from './config'
 
 export default function createApp(db: Database) {
   const app = express()
@@ -36,7 +36,7 @@ export default function createApp(db: Database) {
   app.use(Sentry.Handlers.tracingHandler())
 
   app.use(cors())
-  app.use(express.json())
+  app.use(express.json({ limit: '1mb' }))
 
   // Endpoint for health checks - pinging the server to see if it's alive.
   // This can be used by tests, load balancers, monitoring tools, etc.

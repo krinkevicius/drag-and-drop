@@ -1,7 +1,7 @@
 import { publicProcedure } from '@server/trpc'
 import { User, userInsertSchema, UserRoles } from '@server/entities/user'
 import bcrypt from 'bcrypt'
-import config from '@server/config'
+import { config } from '@server/config'
 import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 import { z } from 'zod'
 

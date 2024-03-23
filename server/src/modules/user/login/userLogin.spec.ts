@@ -2,7 +2,7 @@ import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import { User } from '@server/entities'
 import { fakeUser } from '@server/entities/tests/fakes'
 import bcrypt from 'bcrypt'
-import config from '@server/config'
+import { config } from '@server/config'
 import { createCallerFactory } from '@server/trpc'
 import userRouter from '..'
 

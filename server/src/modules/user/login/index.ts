@@ -1,4 +1,4 @@
-import config from '@server/config'
+import { config } from '@server/config'
 import { publicProcedure } from '@server/trpc'
 import { User, userSchema } from '@server/entities/user'
 import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
