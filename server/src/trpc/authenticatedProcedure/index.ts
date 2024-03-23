@@ -1,5 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken'
-import config from '@server/config'
+import { config } from '@server/config'
 import { UserRoles } from '@server/entities/user'
 import { buildProcedure } from './buildProcedure'
 
