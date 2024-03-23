@@ -67,6 +67,8 @@ const schema = z
     sentryServerDSN: isDevTest
       ? z.string().optional()
       : z.string().trim().min(1),
+
+    tinyPNGKey: isDevTest ? z.string().optional() : z.string().trim().min(1),
   })
   .readonly()
 
@@ -105,6 +107,7 @@ export const config = schema.parse({
   },
 
   sentryServerDSN: env.SENTRY_SERVER_DSN,
+  tinyPNGKey: env.TINYPNG_KEY,
 })
 
 // utility functions
