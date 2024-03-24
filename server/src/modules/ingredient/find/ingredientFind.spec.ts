@@ -2,11 +2,15 @@ import { Ingredient } from '@server/entities'
 import { fakeUser } from '@server/entities/tests/fakes'
 import { UserRoles } from '@server/entities/user'
 import { createCallerFactory } from '@server/trpc'
-import { createTestDatabase } from '@tests/utils/database'
+import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import ingredientRouter from '..'
 
 const db = await createTestDatabase()
 const authUser = fakeUser({ role: UserRoles.Admin })
+
+afterAll(async () => {
+  await dropTestDatabase(db)
+})
 
 await db.getRepository(Ingredient).save([
   {

@@ -1,9 +1,9 @@
 import { Ingredient } from '@server/entities'
-import { adminProcedure } from '@server/trpc/authenticatedProcedure'
+import { publicProcedure } from '@server/trpc'
 import { ILike } from 'typeorm'
 import { z } from 'zod'
 
-export default adminProcedure
+export default publicProcedure
   .input(z.string().trim())
   .query(async ({ input, ctx: { db } }) => {
     const foundIngredients = await db
