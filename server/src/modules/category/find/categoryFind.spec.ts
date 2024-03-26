@@ -2,34 +2,26 @@ import { fakeUser } from '@server/entities/tests/fakes'
 import { UserRoles } from '@server/entities/user'
 import { createCallerFactory } from '@server/trpc'
 import { Category } from '@server/entities'
+import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import categoryRouter from '..'
 
-// Mocking the database
-const db = {
-  categories: [
-    {
-      id: 1,
-      name: 'lithuanian',
-    },
-    {
-      id: 2,
-      name: 'latvian',
-    },
-    {
-      id: 3,
-      name: 'greek',
-    },
-  ] as Category[],
-  getRepository: () => ({
-    findBy: ({ name }: any) =>
-      db.categories.filter((obj) =>
-        obj.name
-          .toLowerCase()
-          // eslint-disable-next-line no-underscore-dangle
-          .includes(name._value.replace(/%/g, '').toLowerCase())
-      ),
-  }),
-}
+const db = await createTestDatabase()
+
+afterAll(async () => {
+  await dropTestDatabase(db)
+})
+
+await db.getRepository(Category).save([
+  {
+    name: 'lithuanian',
+  },
+  {
+    name: 'latvian',
+  },
+  {
+    name: 'greek',
+  },
+])
 
 const authUser = fakeUser({ role: UserRoles.Admin })
 
