@@ -6,17 +6,18 @@ import { v4 as uuidv4 } from 'uuid'
 
 export type ItemRecord = {
   id: string
-  componentType: keyof typeof RecipeItems
+  itemType: keyof typeof RecipeItems
   data: { [key: string]: any }
 }
 
 export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
   const recipeItems = ref<ItemRecord[]>([])
 
-  function createNewItem(componentType: keyof typeof RecipeItems): ItemRecord {
+  function createNewItem(itemType: keyof typeof RecipeItems): ItemRecord {
     const id = uuidv4()
-    const data = { ...RecipeItems[componentType].data }
-    return { id, componentType, data }
+    // need to create a deep copy of data from recipeItems
+    const data = JSON.parse(JSON.stringify(RecipeItems[itemType].data))
+    return { id, itemType, data }
   }
 
   function addToItems(item: ItemRecord, index: number) {
@@ -29,7 +30,7 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
 
   function moveItem(fromIndex: number, toIndex: number | undefined) {
     if (toIndex === undefined) return
-    const itemToMove = recipeItems.value.filter((item) => item.componentType !== 'help')[fromIndex]
+    const itemToMove = recipeItems.value.filter((item) => item.itemType !== 'help')[fromIndex]
 
     // ItemRecord with componentType "help" will be present thus the fromIndex needs to be recalculated:
 
@@ -39,7 +40,7 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
   }
 
   function updatePlaceholderItem(index: number | undefined) {
-    recipeItems.value = recipeItems.value.filter((item) => item.componentType !== 'help')
+    recipeItems.value = recipeItems.value.filter((item) => item.itemType !== 'help')
 
     if (index !== undefined) {
       addToItems(createNewItem('help'), index)
