@@ -2,7 +2,7 @@ import { fakeCategory, fakeRecipe } from '@server/entities/tests/fakes'
 import { createTestDatabase } from '@tests/utils/database'
 import { Category, Recipe } from '@server/entities'
 
-import addCategory from '.'
+import addCategories from '.'
 
 const db = await createTestDatabase()
 
@@ -12,7 +12,10 @@ await db.getRepository(Recipe).save(testRecipe)
 const testCategory = await db.getRepository(Category).save(fakeCategory())
 
 it('should add a pre-existing category to a recipe', async () => {
-  await addCategory({ recipeId: testRecipe.id, names: [testCategory.name] }, db)
+  await addCategories(
+    { recipeId: testRecipe.id, names: [testCategory.name] },
+    db
+  )
 
   const recipeWithCategories = await db.getRepository(Recipe).findOneOrFail({
     where: { id: testRecipe.id },
@@ -26,7 +29,7 @@ it('should add a pre-existing category to a recipe', async () => {
 it('should add category to database if it did not exist already', async () => {
   const categoryNotInDb = fakeCategory()
 
-  await addCategory(
+  await addCategories(
     { recipeId: testRecipe.id, names: [categoryNotInDb.name] },
     db
   )
@@ -45,7 +48,7 @@ it('should add category to database if it did not exist already', async () => {
 it('should store category in lowercase letters with whitespace trimmed', async () => {
   const newCategory = fakeCategory()
 
-  await addCategory(
+  await addCategories(
     {
       recipeId: testRecipe.id,
       names: [`\t   ${newCategory.name}   \t`],
@@ -65,12 +68,12 @@ it('should store category in lowercase letters with whitespace trimmed', async (
 
 it('should throw error if the same category is being added to a recipe', async () => {
   await expect(
-    addCategory({ recipeId: testRecipe.id, names: [testCategory.name] }, db)
+    addCategories({ recipeId: testRecipe.id, names: [testCategory.name] }, db)
   ).rejects.toThrow(/Recipe already has this category!/)
 })
 
 it('should throw error of category name is empty string', async () => {
   await expect(
-    addCategory({ recipeId: testRecipe.id, names: [''] }, db)
+    addCategories({ recipeId: testRecipe.id, names: [''] }, db)
   ).rejects.toThrow(/Category cannot be empty!/)
 })

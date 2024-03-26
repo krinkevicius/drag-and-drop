@@ -9,7 +9,7 @@ const inputSchema = z.object({
   names: z.array(categorySchema.shape.name),
 })
 
-export default async function addCategory(
+export default async function addCategories(
   dataForCategories: z.infer<typeof inputSchema>,
   dbOrManager: DataSource | EntityManager
 ) {
