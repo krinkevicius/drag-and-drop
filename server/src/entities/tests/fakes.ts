@@ -6,6 +6,8 @@ const chance = Chance()
 
 const randomInteger = chance.integer({ min: 1, max: 2147483647 })
 
+export const randomUUID = chance.guid({ version: 4 })
+
 export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
   id: randomInteger,
   email: chance.email(),

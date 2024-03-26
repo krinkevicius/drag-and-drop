@@ -27,7 +27,7 @@ export type ImageBare = Omit<Image, 'recipe'>
 
 export const imageSchema = validates<ImageBare>().with({
   id: z.string().uuid(),
-  imageUrl: z.string(),
-  imageName: z.string().trim(),
+  imageUrl: z.string().trim().min(1, 'Image url cannot be empty!'),
+  imageName: z.string().trim().min(1, 'Image name cannot be empty!'),
   recipeId: z.number().int().positive(),
 })
