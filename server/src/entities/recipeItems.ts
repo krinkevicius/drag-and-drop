@@ -7,6 +7,7 @@ import { descriptionSchema } from './description'
 import { categorySchema } from './category'
 import { quantitySchema } from './quantity'
 import { ingredientSchema } from './ingredient'
+import { imageSchema } from './image'
 
 const baseItemSchema = z.object({
   id: z.string().uuid(),
@@ -24,7 +25,12 @@ export const categoryItemSchema = baseItemSchema.extend({
   }),
 })
 
-const ingredientListItemSchema = baseItemSchema.extend({
+export const imageItemSchema = baseItemSchema.extend({
+  itemType: z.literal('image'),
+  data: imageSchema.pick({ imageName: true, imageUrl: true }),
+})
+
+export const ingredientListItemSchema = baseItemSchema.extend({
   itemType: z.literal('ingredientList'),
   data: z.object({
     quantityIngredientPairs: z.array(
@@ -37,5 +43,6 @@ const ingredientListItemSchema = baseItemSchema.extend({
 
 export type DescriptionItem = z.infer<typeof descriptionItemSchema>
 export type CategoryItem = z.infer<typeof categoryItemSchema>
+export type ImageItem = z.infer<typeof imageItemSchema>
 export type IngredientItem = z.infer<typeof ingredientListItemSchema>
 export type RecipeItem = DescriptionItem | CategoryItem | IngredientItem
