@@ -11,6 +11,23 @@ const testRecipe = fakeRecipe()
 await db.getRepository(Recipe).save(testRecipe)
 const testCategory = await db.getRepository(Category).save(fakeCategory())
 
+it('should add multiple categories', async () => {
+  const newRecipe = await db.getRepository(Recipe).save(fakeRecipe())
+
+  const [newCategory1, newCategory2] = [fakeCategory(), fakeCategory()]
+  await addCategories(
+    { recipeId: newRecipe.id, names: [newCategory1.name, newCategory2.name] },
+    db
+  )
+
+  const recipeInDb = await db.getRepository(Recipe).findOneOrFail({
+    where: { id: newRecipe.id },
+    relations: { categories: true },
+  })
+
+  expect(recipeInDb.categories).toHaveLength(2)
+})
+
 it('should add a pre-existing category to a recipe', async () => {
   await addCategories(
     { recipeId: testRecipe.id, names: [testCategory.name] },
@@ -76,4 +93,24 @@ it('should throw error of category name is empty string', async () => {
   await expect(
     addCategories({ recipeId: testRecipe.id, names: [''] }, db)
   ).rejects.toThrow(/Category cannot be empty!/)
+})
+
+it('should work with transactions', async () => {
+  const newCategory = fakeCategory()
+
+  await db.transaction(async (transactionalManager) => {
+    await addCategories(
+      { recipeId: testRecipe.id, names: [newCategory.name] },
+      transactionalManager
+    )
+  })
+
+  const foundCategory = await db
+    .getRepository(Category)
+    .findOneOrFail({ where: { name: newCategory.name } })
+
+  expect(foundCategory).toEqual({
+    id: expect.any(Number),
+    name: newCategory.name,
+  })
 })
