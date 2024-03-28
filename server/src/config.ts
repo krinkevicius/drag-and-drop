@@ -8,9 +8,30 @@ if (!env.NODE_ENV) env.NODE_ENV = 'development'
 const isTest = env.NODE_ENV === 'test'
 const isDevTest = env.NODE_ENV === 'development' || isTest
 
-const isInMemory = env.DB_TYPE === 'pg-mem'
+export const isInMemory = env.DB_TYPE === 'pg-mem'
 
-const schema = z
+const s3config = z.object({
+  clientConfig: z.object({
+    region: isDevTest
+      ? z.string().trim().min(1).optional()
+      : z.string().trim().min(1),
+    credentials: z.object({
+      accessKeyId: isDevTest
+        ? z.string().trim().min(1).optional()
+        : z.string().trim().min(1),
+      secretAccessKey: isDevTest
+        ? z.string().trim().min(1).optional()
+        : z.string().trim().min(1),
+    }),
+  }),
+  bucket: isDevTest
+    ? z.string().trim().min(1).optional()
+    : z.string().trim().min(1),
+})
+
+export type S3Config = z.infer<typeof s3config>
+
+export const schema = z
   .object({
     env: z
       .enum(['development', 'production', 'staging', 'test'])
@@ -46,29 +67,12 @@ const schema = z
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
 
-    s3config: z.object({
-      clientConfig: z.object({
-        region: isDevTest
-          ? z.string().trim().min(1).optional()
-          : z.string().trim().min(1),
-        credentials: z.object({
-          accessKeyId: isDevTest
-            ? z.string().trim().min(1).optional()
-            : z.string().trim().min(1),
-          secretAccessKey: isDevTest
-            ? z.string().trim().min(1).optional()
-            : z.string().trim().min(1),
-        }),
-      }),
-      bucket: isDevTest
-        ? z.string().trim().min(1).optional()
-        : z.string().trim().min(1),
-    }),
+    s3config,
     sentryServerDSN: isDevTest
       ? z.string().optional()
       : z.string().trim().min(1),
 
-    tinyPNGKey: isDevTest ? z.string().optional() : z.string().trim().min(1),
+    tinyfyKey: isDevTest ? z.string().optional() : z.string().trim().min(1),
   })
   .readonly()
 
@@ -97,17 +101,17 @@ export const config = schema.parse({
 
   s3config: {
     clientConfig: {
-      region: process.env.AWS_REGION,
+      region: env.AWS_REGION,
       credentials: {
-        accessKeyId: process.env.AWS_BUCKET_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_BUCKET_SECRET_ACCESS_KEY,
+        accessKeyId: env.AWS_BUCKET_ACCESS_KEY,
+        secretAccessKey: env.AWS_BUCKET_SECRET_ACCESS_KEY,
       },
     },
-    bucket: process.env.AWS_BUCKET_NAME,
+    bucket: env.AWS_BUCKET_NAME,
   },
 
   sentryServerDSN: env.SENTRY_SERVER_DSN,
-  tinyPNGKey: env.TINYPNG_KEY,
+  tinyfyKey: env.TINIFY_KEY,
 })
 
 // utility functions
