@@ -2,7 +2,7 @@ import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import {
   fakeDescription,
   fakeRecipe,
-  randomUUID,
+  getRandomUUID,
 } from '@server/entities/tests/fakes'
 import { Description, Recipe } from '@server/entities'
 import addDescriptions from '.'
@@ -61,7 +61,7 @@ it('should throw error if id is not uuid', async () => {
 })
 
 it('should not allow to save descriptions with same id', async () => {
-  const uuid = randomUUID
+  const uuid = getRandomUUID()
   await expect(
     addDescriptions(
       [
@@ -80,4 +80,17 @@ it('should fail if descriptionText is empty string', async () => {
       db
     )
   ).rejects.toThrow(/Cannot add a description with no text!/)
+})
+
+it('should work with transactions', async () => {
+  const newDescription = fakeDescription({ recipeId: testRecipe.id })
+  await db.transaction(async (transactionalManager) => {
+    await addDescriptions([newDescription], transactionalManager)
+  })
+
+  const descriptionInDb = await descriptionRepo.findOneOrFail({
+    where: { id: newDescription.id },
+  })
+
+  expect(descriptionInDb).toEqual(newDescription)
 })
