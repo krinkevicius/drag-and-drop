@@ -1,5 +1,9 @@
 import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
-import { fakeRecipe, fakeImage, randomUUID } from '@server/entities/tests/fakes'
+import {
+  fakeRecipe,
+  fakeImage,
+  getRandomUUID,
+} from '@server/entities/tests/fakes'
 import { Image, Recipe } from '@server/entities'
 import addImages from '.'
 
@@ -49,7 +53,7 @@ it('should throw error if id is not uuid', async () => {
 })
 
 it('should not allow to images with the same id', async () => {
-  const uuid = randomUUID
+  const uuid = getRandomUUID()
   await expect(
     addImages(
       [
@@ -71,4 +75,18 @@ it('should fail if imageName is empty string', async () => {
   await expect(
     addImages([fakeImage({ imageName: '', recipeId: testRecipe.id })], db)
   ).rejects.toThrow(/Image name cannot be empty!/)
+})
+
+it('should work with transactions', async () => {
+  const newImage = fakeImage({ recipeId: testRecipe.id })
+
+  await db.transaction(async (transactionalManager) => {
+    await addImages([newImage], transactionalManager)
+  })
+
+  const imageInDb = await imageRepo.findOneOrFail({
+    where: { id: newImage.id },
+  })
+
+  expect(imageInDb).toEqual(newImage)
 })
