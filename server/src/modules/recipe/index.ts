@@ -1,6 +1,6 @@
 import { router } from '@server/trpc'
-import fullTest from './fullTest'
+import create from './create'
 
 export default router({
-  fullTest,
+  create,
 })

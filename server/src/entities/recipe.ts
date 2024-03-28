@@ -16,7 +16,7 @@ export class Recipe {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @Unique(['name'])
+  @Unique('unique-name', ['name'])
   @Column('text')
   name: string
 

@@ -1,10 +1,14 @@
-import { createTestDatabase } from '@tests/utils/database'
+import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import { Recipe } from '@server/entities'
 import { fakeRecipe } from '@server/entities/tests/fakes'
 import createBareRecipe from '.'
 
 const db = await createTestDatabase()
 const testRecipe = fakeRecipe()
+
+afterAll(async () => {
+  await dropTestDatabase(db)
+})
 
 it('should save a new recipe in the database', async () => {
   const newRecipe = await createBareRecipe(testRecipe, db)
@@ -21,7 +25,7 @@ it('should save a new recipe in the database', async () => {
   })
 })
 
-it.skip('does not allow to add a recipe with the same name', async () => {
+it('does not allow to add a recipe with the same name', async () => {
   await expect(createBareRecipe(testRecipe, db)).rejects.toThrow(
     /Recipe with this name already exists/
   )

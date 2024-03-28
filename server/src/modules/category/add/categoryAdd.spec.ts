@@ -1,10 +1,14 @@
 import { fakeCategory, fakeRecipe } from '@server/entities/tests/fakes'
-import { createTestDatabase } from '@tests/utils/database'
+import { createTestDatabase, dropTestDatabase } from '@tests/utils/database'
 import { Category, Recipe } from '@server/entities'
 
 import addCategories from '.'
 
 const db = await createTestDatabase()
+
+afterAll(async () => {
+  await dropTestDatabase(db)
+})
 
 const testRecipe = fakeRecipe()
 
