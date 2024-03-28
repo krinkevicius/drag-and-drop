@@ -32,6 +32,10 @@ type QuantityBare = Omit<Quantity, 'ingredient' | 'ingredientList'>
 export const quantitySchema = validates<QuantityBare>().with({
   id: z.number().int().positive(),
   ingredientId: z.number().int().positive(),
-  quantity: z.string().trim().min(1).max(100),
+  quantity: z
+    .string()
+    .trim()
+    .min(1, 'Quantity cannot be empty!')
+    .max(100, 'Quantity is too long!'),
   ingredientListId: z.string().uuid(),
 })
