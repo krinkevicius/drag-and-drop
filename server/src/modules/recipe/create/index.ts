@@ -4,7 +4,7 @@ import type { DescriptionBare } from '@server/entities/description'
 import type {
   DescriptionItem,
   CategoryItem,
-  IngredientItem,
+  IngredientListItem,
   ImageItem,
 } from '@server/entities/recipeItems'
 import {
@@ -76,7 +76,8 @@ export default adminProcedure
 
       const ingredientLists = items
         .filter(
-          (item): item is IngredientItem => item.itemType === 'ingredientList'
+          (item): item is IngredientListItem =>
+            item.itemType === 'ingredientList'
         )
         .map((item) => ({
           id: item.id,

@@ -10,6 +10,8 @@ const isDevTest = env.NODE_ENV === 'development' || isTest
 
 export const isInMemory = env.DB_TYPE === 'pg-mem'
 
+export const pageSize = isTest ? 2 : 9
+
 const s3config = z.object({
   clientConfig: z.object({
     region: isDevTest
