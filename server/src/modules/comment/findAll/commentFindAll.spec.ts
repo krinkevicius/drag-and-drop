@@ -19,7 +19,6 @@ const [testComment1, testComment2] = await db.getRepository(Comment).save([
   fakeComment({
     recipeId: testRecipe.id,
     userId: commentAuthor.id,
-    // createdAt: new Date(1999, 1, 1),
   }),
 ])
 
@@ -44,7 +43,7 @@ it.skipIf(isInMemory)('should find all comments', async () => {
 })
 
 it.skipIf(isInMemory)(
-  'orders comments based on their created at day',
+  'orders comments based on their created at timestamp',
   async () => {
     const oldComment = await db.getRepository(Comment).save(
       fakeComment({
