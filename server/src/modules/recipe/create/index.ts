@@ -19,7 +19,6 @@ import { ImageBare } from '@server/entities/image'
 import addImages from '@server/modules/image/add'
 import addIngredientLists from '@server/modules/ingredientList/add'
 import createBareRecipe from '../createBare'
-// import createDescription from '@server/modules/description/create'
 
 const inputSchema = z.object({
   name: z.string(),
@@ -34,11 +33,6 @@ const inputSchema = z.object({
     )
     .min(1, 'Cannot create a recipe without items'),
 })
-
-// type RecipeItems = z.infer<typeof inputSchema>
-// type DescriptionItem = z.infer<typeof descriptionItemSchema>
-// type CategoryItem = z.infer<typeof categoryItemSchema>
-// type IngredientItem = z.infer<typeof ingredientListItemSchema>
 
 export default adminProcedure
   .input(inputSchema)

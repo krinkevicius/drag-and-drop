@@ -3,8 +3,6 @@ import { fakeRecipe, fakeUser } from '@server/entities/tests/fakes'
 import { UserRoles } from '@server/entities/user'
 import { createCallerFactory } from '@server/trpc'
 import { Recipe } from '@server/entities'
-// Module uses typeorm transactions that pg-mem does not fully support
-// Some tests will be skipped based on this value
 import { isInMemory } from '@server/config'
 import recipeRouter from '..'
 
