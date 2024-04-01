@@ -25,7 +25,6 @@ vi.mock('jsonwebtoken', () => ({
           id: 2,
           username: 'TestUser69',
           role: token === VALID_USER_TOKEN ? 'registeredUser' : 'admin',
-          favoriteRecipes: [],
         },
       }
     },

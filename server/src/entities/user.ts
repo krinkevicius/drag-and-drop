@@ -3,14 +3,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  // OneToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm'
 import { validates } from '@server/utils/validation'
 import { z } from 'zod'
-import { Recipe } from './recipe'
-// import { Comment } from './comment'
+import { Recipe, Comment } from '.'
 
 @Entity('users')
 export class User {
@@ -35,10 +34,10 @@ export class User {
   @JoinTable()
   favoriteRecipes: Recipe[]
 
-  // @OneToMany(() => Comment, (comment) => comment.author, {
-  //   cascade: ['insert', 'update'],
-  // })
-  // comments: Comment[]
+  @OneToMany(() => Comment, (comment) => comment.userId, {
+    cascade: ['insert', 'update'],
+  })
+  comments: Comment[]
 }
 
 export enum UserRoles {
@@ -64,10 +63,7 @@ export const userSchema = validates<UserBare>().with({
 
 export const userInsertSchema = userSchema.omit({ id: true, role: true })
 
-export type AuthUser = Pick<
-  User,
-  'id' | 'username' | 'role' | 'favoriteRecipes'
->
+export type AuthUser = Pick<User, 'id' | 'username' | 'role'>
 
 export const authUserSchema = validates<AuthUser>().with({
   id: z.number().int().positive(),
@@ -77,8 +73,6 @@ export const authUserSchema = validates<AuthUser>().with({
     .trim()
     .regex(/^[a-zA-Z0-9]+$/),
   role: z.nativeEnum(UserRoles),
-  // role: z.union([z.literal('admin'), z.literal('registeredUser')]),
-  favoriteRecipes: z.array(z.any()),
 })
 
 export const adminUserSchema = validates<AuthUser>().with({
@@ -89,5 +83,4 @@ export const adminUserSchema = validates<AuthUser>().with({
     .trim()
     .regex(/^[a-zA-Z0-9]+$/),
   role: z.literal('admin'),
-  favoriteRecipes: z.array(z.any()),
 })

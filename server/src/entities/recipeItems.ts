@@ -33,16 +33,22 @@ export const imageItemSchema = baseItemSchema.extend({
 export const ingredientListItemSchema = baseItemSchema.extend({
   itemType: z.literal('ingredientList'),
   data: z.object({
-    quantityIngredientPairs: z.array(
-      quantitySchema
-        .pick({ quantity: true })
-        .merge(ingredientSchema.pick({ name: true }))
-    ),
+    quantityIngredientPairs: z
+      .array(
+        quantitySchema
+          .pick({ quantity: true })
+          .merge(ingredientSchema.pick({ name: true }))
+      )
+      .min(1, 'Cannot add an empty list!'),
   }),
 })
 
 export type DescriptionItem = z.infer<typeof descriptionItemSchema>
 export type CategoryItem = z.infer<typeof categoryItemSchema>
 export type ImageItem = z.infer<typeof imageItemSchema>
-export type IngredientItem = z.infer<typeof ingredientListItemSchema>
-export type RecipeItem = DescriptionItem | CategoryItem | IngredientItem
+export type IngredientListItem = z.infer<typeof ingredientListItemSchema>
+export type RecipeItem =
+  | DescriptionItem
+  | CategoryItem
+  | IngredientListItem
+  | ImageItem
