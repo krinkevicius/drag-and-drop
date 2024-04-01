@@ -25,7 +25,7 @@ await db.getRepository(Category).save([
 
 const authUser = fakeUser({ role: UserRoles.Admin })
 
-const { find } = createCallerFactory(categoryRouter)({ db, authUser } as any)
+const { find } = createCallerFactory(categoryRouter)({ db, authUser })
 
 it('should find all categories based on search keyword', async () => {
   const foundCategories = await find('ian')

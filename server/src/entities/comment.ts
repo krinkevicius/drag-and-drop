@@ -36,6 +36,9 @@ export class Comment {
 
 export type CommentBare = Omit<Comment, 'recipe' | 'user'>
 
+export type CommentWithAuhor = Pick<Comment, 'commentText' | 'createdAt'> &
+  Pick<User, 'username'>
+
 export const commentSchema = validates<CommentBare>().with({
   id: z.number().int().positive(),
   commentText: z.string().trim().min(1, 'Cannot add a comment with no text!'),

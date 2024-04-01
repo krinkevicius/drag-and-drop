@@ -7,6 +7,7 @@ import {
   Ingredient,
   Category,
   IngredientList,
+  Comment,
 } from '..'
 import { UserRoles } from '../user'
 
@@ -77,5 +78,15 @@ export const fakeIngredientList = <T extends Partial<IngredientList>>(
     name: random.word(),
     quantity: random.word(),
   })),
+  ...overrides,
+})
+
+export const fakeComment = <T extends Partial<Comment>>(
+  overrides: T = {} as T
+) => ({
+  id: randomInteger,
+  commentText: random.word(),
+  recipeId: randomInteger,
+  userId: randomInteger,
   ...overrides,
 })
