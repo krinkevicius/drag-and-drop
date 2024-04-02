@@ -51,10 +51,16 @@ export const userSchema = validates<UserBare>().with({
   email: z.string().trim().toLowerCase().email(),
   username: z
     .string()
-    .min(5)
+    .min(5, 'Username is too short! (min 5)')
     .trim()
-    .regex(/^[a-zA-Z0-9]+$/),
-  password: z.string().min(8).max(64),
+    .regex(
+      /^[a-zA-Z0-9]+$/,
+      'Username can only contain alphanumeric characters!'
+    ),
+  password: z
+    .string()
+    .min(8, 'Password too short! Your password should be at least 8 characters')
+    .max(64, 'Password too long!'),
   role: z.union([
     z.literal(UserRoles.Admin),
     z.literal(UserRoles.RegistererUser),

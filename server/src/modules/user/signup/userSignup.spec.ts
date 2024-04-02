@@ -60,6 +60,12 @@ it('requires a username of at least 5 characters', async () => {
   )
 })
 
+it('throws an error if password is less than 8 characters long', async () => {
+  await expect(signup(fakeUser({ password: 'short' }))).rejects.toThrow(
+    /Password too short! Your password should be at least 8 characters/
+  )
+})
+
 it('requires a username of alphanumeric characters', async () => {
   await expect(
     signup({
