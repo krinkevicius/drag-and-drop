@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
-import { RecipeItems } from '@/consts'
+import { recipeItemsDefault } from '@/consts'
 import { useDragDataStore } from '@/stores/dragData'
 
 const dragDataStore = useDragDataStore()
 
 const props = defineProps({
-  itemType: { type: String as PropType<keyof typeof RecipeItems>, required: true },
+  itemType: { type: String as PropType<keyof typeof recipeItemsDefault>, required: true },
 })
 
-const pathToIcon = `src/assets/${props.itemType}.svg`
+const pathToIcon = `/${props.itemType}.svg`
 
 function dragStartHandler() {
   dragDataStore.dragData = { dragType: 'icon', dragValue: props.itemType }
@@ -22,7 +22,7 @@ function dragEndHandler() {
 
 <template>
   <div
-    class="item-icon"
+    class="h-12 w-12 bg-secondary-blue bg-center bg-no-repeat"
     draggable="true"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
@@ -30,13 +30,3 @@ function dragEndHandler() {
     :data-testid="`draggable-${props.itemType}-icon`"
   ></div>
 </template>
-
-<style scoped>
-.item-icon {
-  height: 50px;
-  width: 50px;
-  border: 1px solid black;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-</style>
