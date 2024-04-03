@@ -23,7 +23,7 @@ const toolbarOptions = [
 </script>
 
 <template>
-  <div class="description-insert">
+  <div class="border-2 border-main-blue">
     <QuillEditor
       theme="snow"
       :toolbar="toolbarOptions"
@@ -32,12 +32,3 @@ const toolbarOptions = [
     />
   </div>
 </template>
-
-<style scoped>
-.description-insert {
-  min-width: 20px;
-  min-height: 20px;
-  text-align: center;
-  border: 3px solid blue;
-}
-</style>
