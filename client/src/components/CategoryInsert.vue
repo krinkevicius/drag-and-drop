@@ -47,7 +47,7 @@ function removeCategory(index: number) {
     </div>
     <div class="flex flex-row px-4 pb-4">
       <input
-        class="category-input focus:shadow-outline w-full appearance-none rounded-l-lg border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        class="category-input focus:shadow-outline w-full appearance-none rounded-l-lg border px-3 py-2 text-xs leading-tight text-gray-700 shadow focus:outline-none md:text-base"
         v-model="newCategory"
         label="New Category"
         type="text"

@@ -58,14 +58,14 @@ function removeFromList(index: number) {
     </div>
     <div class="flex flex-row px-4 pb-4">
       <input
-        class="quantity-input focus:shadow-outline w-full appearance-none rounded-l-lg border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        class="quantity-input focus:shadow-outline w-full appearance-none rounded-l-lg border px-3 py-2 text-xs leading-tight text-gray-700 shadow focus:outline-none md:text-base"
         v-model="newQuantity"
         label="Quantity"
         type="text"
         placeholder="Quantity"
       />
       <input
-        class="ingredient-input focus:shadow-outline w-full appearance-none border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        class="ingredient-input focus:shadow-outline w-full appearance-none border px-3 py-2 text-xs leading-tight text-gray-700 shadow focus:outline-none md:text-base"
         v-model="newIngredient"
         label="Ingredient"
         type="text"
