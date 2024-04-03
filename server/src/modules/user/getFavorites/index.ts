@@ -1,5 +1,5 @@
 import { User } from '@server/entities'
-import { RecipeForCard } from '@server/entities/recipe'
+import type { RecipeForCard } from '@server/entities/recipe'
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 
 export default authenticatedProcedure.query(

@@ -1,5 +1,6 @@
 import { Comment, User } from '@server/entities'
-import { CommentWithAuhor, commentSchema } from '@server/entities/comment'
+import { commentSchema } from '@server/entities/comment'
+import type { CommentWithAuhor } from '@server/entities/comment'
 import { publicProcedure } from '@server/trpc'
 
 const inputSchema = commentSchema.pick({ recipeId: true })

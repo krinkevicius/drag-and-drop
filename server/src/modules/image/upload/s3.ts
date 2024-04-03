@@ -1,10 +1,7 @@
 import { isDefined } from '@server/config'
 import type { S3Config } from '@server/config'
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandOutput,
-} from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import type { PutObjectCommandOutput } from '@aws-sdk/client-s3'
 import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 import { v4 as uuidv4 } from 'uuid'
 import { logger } from '@server/logger'

@@ -1,4 +1,5 @@
-import { Image, ImageBare, imageSchema } from '@server/entities/image'
+import { Image, imageSchema } from '@server/entities/image'
+import type { ImageBare } from '@server/entities/image'
 import { DataSource, EntityManager } from 'typeorm'
 import { z } from 'zod'
 

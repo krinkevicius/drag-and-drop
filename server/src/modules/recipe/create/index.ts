@@ -15,7 +15,7 @@ import {
 } from '@server/entities/recipeItems'
 import addCategories from '@server/modules/category/add'
 import addDescriptions from '@server/modules/description/add'
-import { ImageBare } from '@server/entities/image'
+import type { ImageBare } from '@server/entities/image'
 import addImages from '@server/modules/image/add'
 import addIngredientLists from '@server/modules/ingredientList/add'
 import createBareRecipe from '../createBare'
