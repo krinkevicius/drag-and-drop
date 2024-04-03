@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ItemRecord } from '@/stores/createRecipe'
 import type { PropType } from 'vue'
-import { RecipeItems } from '@/consts'
+import { recipeItemsDefault } from '@/consts'
 import { ref } from 'vue'
 import { useCreateRecipeStore } from '@/stores/createRecipe'
 import { useDragDataStore } from '@/stores/dragData'
@@ -34,32 +34,31 @@ function dragEndHandler() {
 
 <template>
   <div
-    class="wrapper"
-    :class="{ dragging: isDragged }"
+    class="max-w-32 text-wrap flex min-h-[100px] flex-col rounded-xl border-4 text-center"
+    :class="[
+      props.item.itemType === 'help' ? 'border-dashed border-secondary-blue' : 'border-main-blue',
+      isDragged ? 'opacity-50' : 'opacity-100',
+    ]"
     :draggable="isDraggable"
     @dragstart="dragStartHandler"
     @dragend="dragEndHandler"
-    :data-testid="`${$props.item.componentType}-item`"
+    :data-testid="`${$props.item.itemType}-item`"
   >
-    This is a single recipe item
-    <div class="insert" @mouseenter="toggleDrag" @mouseleave="toggleDrag">
-      <component :is="RecipeItems[props.item.componentType].component" :id="item.id"></component>
+    <div
+      v-if="props.item.itemType !== 'help'"
+      class="rounded-t-l flex justify-end self-stretch bg-main-blue px-2.5 py-1 text-white"
+    >
+      <button
+        class="hover:underline"
+        title="Delete item"
+        @click="recipeStore.removeItem(props.item)"
+      >
+        X
+      </button>
+    </div>
+    <div class="self-center" v-if="props.item.itemType === 'help'">Place item here</div>
+    <div class="h-full self-stretch" @mouseenter="toggleDrag" @mouseleave="toggleDrag">
+      <component :is="recipeItemsDefault[props.item.itemType].component" :id="item.id"></component>
     </div>
   </div>
 </template>
-
-<style scoped>
-.wrapper {
-  min-height: 100px;
-  text-align: center;
-  border: 5px solid black;
-}
-
-.dragging {
-  opacity: 50%;
-}
-
-.insert {
-  border: 3px dashed black;
-}
-</style>
