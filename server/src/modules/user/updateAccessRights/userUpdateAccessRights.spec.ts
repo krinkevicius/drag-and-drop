@@ -32,7 +32,7 @@ it('should update registered users role to admin', async () => {
   const result = await updateAccessRights({ id: regularUser.id })
 
   // Check that there were no errors
-  expect(result).toEqual('ok')
+  expect(result).toEqual(UserRoles.Admin)
 
   // Check in db
   const updatedUser = await userRepo.findOne({
@@ -50,7 +50,7 @@ it('should update admin role to registered user', async () => {
   const result = await updateAccessRights({ id: differentAdmin.id })
 
   // Check that there were no errors
-  expect(result).toEqual('ok')
+  expect(result).toEqual(UserRoles.RegistererUser)
 
   // Check in db
   const updatedUser = await userRepo.findOne({

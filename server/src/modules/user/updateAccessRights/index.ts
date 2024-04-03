@@ -32,11 +32,6 @@ export default adminProcedure
       .set({ role: newRole })
       .where({ id })
       .execute()
-    // .createQueryBuilder()
-    // .update(User)
-    // .set({ firstName: "Timber", lastName: "Saw" })
-    // .where("id = :id", { id: 1 })
-    // .execute()
 
-    return 'ok'
+    return newRole
   })
