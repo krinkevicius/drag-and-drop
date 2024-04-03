@@ -1,11 +1,14 @@
-const { exec } = require('child_process')
+import { exec } from 'child_process'
 
-const [command, migrationName] = process.argv.slice(2)
+const [command, migrationPath, migrationName] = process.argv.slice(2)
 
 // using a custom script to run typeorm cli to address 2 issues:
 // 1. it's tedious to pass src/database/migrations as a path to typeorm cli
 // 2. using bash -c in script tags does not work on Windows without WSL
-const script = `npm run typeorm -- ${command.replace('$0', migrationName)}`
+const script = `npm run typeorm ${command} ${migrationPath.replace(
+  '@0',
+  migrationName
+)}`
 
 const child = exec(script, (error) => {
   if (error) {

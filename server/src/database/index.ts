@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { fileURLToPath } from 'node:url'
 import { DataSource, type DataSourceOptions } from 'typeorm'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { newDb } from 'pg-mem'
@@ -45,7 +46,8 @@ function createMemoryDatabase(): DataSource {
 }
 
 function relative(...paths: string[]) {
-  return join(import.meta.url, ...paths)
+  const directory = join(fileURLToPath(import.meta.url), '..')
+  return join(directory, ...paths)
 }
 
 export type Database = DataSource
