@@ -2,8 +2,8 @@
 import { ref, watch } from 'vue'
 import type { Category, CategoryItem } from '@mono/server/src/shared/entities'
 import { useCreateRecipeStore } from '@/stores/createRecipe'
-import useDelayedRef from '@/composables/useDelayedRef/index'
-import capitalizeFirstLetter from '@/composables/useCapitalizeFirstLetter/index'
+import useDelayedRef from '@/composables/useDelayedRef'
+import capitalizeFirstLetter from '@/composables/useCapitalizeFirstLetter'
 import { trpc } from '@/trpc'
 
 const store = useCreateRecipeStore()
@@ -38,32 +38,33 @@ function removeCategory(index: number) {
 </script>
 
 <template>
-  <div class="category-insert">
-    <div v-for="(category, index) in item!.data.categories" :key="index">
-      {{ capitalizeFirstLetter(category) }} <button @click="removeCategory(index)">Remove</button>
+  <div class="pt-2">
+    <div class="pb-2" v-for="(category, index) in item!.data.categories" :key="index">
+      {{ capitalizeFirstLetter(category) }}
+      <button class="hover:underline" @click="removeCategory(index)" title="Remove category">
+        Remove
+      </button>
     </div>
-    <input
-      class="category-input"
-      v-model="newCategory"
-      label="New Category"
-      type="text"
-      placeholder="Type category you want to add"
-      list="categoriesInDb"
-    />
-    <datalist id="categoriesInDb">
-      <option v-for="(category, index) in foundCategories" :key="index">
-        {{ capitalizeFirstLetter(category.name) }}
-      </option>
-    </datalist>
-    <button class="add-category" @click="add">Add category</button>
+    <div class="flex flex-row px-4 pb-4">
+      <input
+        class="category-input focus:shadow-outline w-full appearance-none rounded-l-lg border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        v-model="newCategory"
+        label="New Category"
+        type="text"
+        placeholder="Type category you want to add"
+        list="categoriesInDb"
+      />
+      <datalist id="categoriesInDb">
+        <option v-for="(category, index) in foundCategories" :key="index">
+          {{ capitalizeFirstLetter(category.name) }}
+        </option>
+      </datalist>
+      <button
+        class="focus:shadow-outline rounded-r-lg bg-main-blue px-4 py-2 text-xs font-normal text-white hover:bg-secondary-blue focus:outline-none md:text-base md:font-bold"
+        @click="add"
+      >
+        Add category
+      </button>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.category-insert {
-  min-width: 20px;
-  min-height: 20px;
-  text-align: center;
-  border: 3px solid yellow;
-}
-</style>
