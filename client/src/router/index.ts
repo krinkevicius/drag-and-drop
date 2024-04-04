@@ -10,8 +10,14 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
+      path: '/recipe/:id',
+      name: 'SingleRecipe',
+      component: () => import('../views/SingleRecipeView.vue'),
+      props: { id: true },
+    },
+    {
       path: '/dashboard',
-      name: 'CreateRecipe',
+      name: 'Dashboard',
       component: () => import('../views/DashboardView.vue'),
       beforeEnter: [authenticateAdmin],
       children: [
