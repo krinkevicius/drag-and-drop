@@ -10,7 +10,13 @@ const isDevTest = env.NODE_ENV === 'development' || isTest
 
 export const isInMemory = env.DB_TYPE === 'pg-mem'
 
-export const pageSize = isTest ? 2 : 9
+export const pageSize = isTest ? 2 : 12
+
+const email = z.string().trim().toLowerCase().email()
+const password = z
+  .string()
+  .min(8, 'Password too short! Your password should be at least 8 characters')
+  .max(64, 'Password too long!')
 
 const s3config = z.object({
   clientConfig: z.object({
@@ -69,6 +75,11 @@ export const schema = z
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
 
+    adminCredentials: z.object({
+      email: isDevTest ? email.optional() : email,
+      password: isDevTest ? password.optional() : password,
+    }),
+
     s3config,
     sentryServerDSN: isDevTest
       ? z.string().optional()
@@ -99,6 +110,11 @@ export const config = schema.parse({
     logging: env.DB_LOGGING,
     synchronize: env.DB_SYNC,
     ssl: env.DB_SSL,
+  },
+
+  adminCredentials: {
+    email: env.ADMIN_EMAIL,
+    password: env.ADMIN_PASSWORD,
   },
 
   s3config: {
