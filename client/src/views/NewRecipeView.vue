@@ -1,11 +1,36 @@
 <script setup lang="ts">
 import { useCreateRecipeStore } from '@/stores/createRecipe'
 import { useDragDataStore } from '@/stores/dragData'
+import { useErrorStore } from '@/stores/errorStore'
 import RecipeItem from '@/components/RecipeItem.vue'
-import { RecipeItems } from '@/consts'
+import { recipeItemsDefault } from '@/consts'
+import { withError } from '@/composables/useErrorHandling'
+import { computed, ref, toRefs, watch } from 'vue'
+import Popup from '@/components/Popup.vue'
+import FormButton from '@/components/FormButton.vue'
 
 const createRecipeStore = useCreateRecipeStore()
 const dragDataStore = useDragDataStore()
+const { globalErrorMessage } = toRefs(useErrorStore())
+
+const confirmationMessage = ref<string>('')
+const successMessage = ref<string>('')
+const loading = ref<boolean>(false)
+
+const open = computed(() => {
+  return confirmationMessage.value.length || successMessage.value.length ? true : false
+})
+
+function close() {
+  confirmationMessage.value = ''
+  successMessage.value = ''
+}
+
+watch(globalErrorMessage, () => {
+  if (!globalErrorMessage.value) return
+  loading.value = false
+  confirmationMessage.value = ''
+})
 
 type ClosestItem = {
   offset: number
@@ -55,23 +80,71 @@ function onDropHandler() {
 
   if (dragDataStore.dragData.dragType === 'icon') {
     const newItem = createRecipeStore.createNewItem(
-      dragDataStore.dragData.dragValue as keyof typeof RecipeItems
+      dragDataStore.dragData.dragValue as keyof typeof recipeItemsDefault
     )
     createRecipeStore.addToItems(newItem, dragDataStore.itemInsertIndex!)
   } else if (dragDataStore.dragData.dragType === 'item') {
     createRecipeStore.moveItem(dragDataStore.dragData.dragValue, dragDataStore.itemInsertIndex)
   }
 }
+
+function askForConfirmation() {
+  confirmationMessage.value = 'Are you sure? You will not be able to edit the recipe afterwards.'
+}
+
+const createRecipe = withError(async () => {
+  loading.value = true
+  await createRecipeStore.createRecipe()
+  loading.value = false
+  successMessage.value = 'Recipe saved successfully!'
+  confirmationMessage.value = ''
+}, globalErrorMessage)
 </script>
 
 <template>
+  <Popup :open="open" :close="close">
+    <template #popupContent>
+      <div class="pb-2 text-center" v-if="confirmationMessage">
+        {{ confirmationMessage }}
+      </div>
+
+      <div class="flex justify-center pt-2">
+        <FormButton
+          :button-text="'Confirm'"
+          :loading="loading"
+          :successMessage="successMessage"
+          @click="createRecipe"
+        />
+      </div>
+    </template>
+  </Popup>
   <div
-    class="dropzone"
+    class="dropzone flex h-full flex-col gap-[1em] py-4"
     @dragover.prevent="dragOverHandler($event)"
     @drop="onDropHandler"
     data-testid="dropzone"
   >
-    <div v-if="!createRecipeStore.recipeItems.length">Drag Icons!</div>
+    <div class="mb-6 flex w-full flex-row justify-center">
+      <input
+        class="focus:shadow-outline w-3/4 appearance-none rounded-l-lg border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+        label="Recipe Name"
+        type="text"
+        placeholder="Enter recipe name"
+        v-model="createRecipeStore.recipeName"
+      />
+      <button
+        class="focus:shadow-outline w-1/4 rounded-r-lg bg-main-blue px-4 py-2 text-xs font-normal text-white hover:bg-secondary-blue focus:outline-none md:text-base md:font-bold"
+        @click="askForConfirmation"
+      >
+        Create Recipe
+      </button>
+    </div>
+    <div
+      class="mt-4 text-center text-2xl font-semibold"
+      v-if="!createRecipeStore.recipeItems.length"
+    >
+      Drag icons to create a recipe!
+    </div>
     <div
       class="item-wrapper"
       v-for="item in createRecipeStore.recipeItems"
@@ -82,12 +155,3 @@ function onDropHandler() {
     </div>
   </div>
 </template>
-
-<style scoped>
-.dropzone {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
-</style>
