@@ -1,7 +1,7 @@
 import { Recipe, recipeInsertSchema } from '@server/entities/recipe'
-import { TRPCError } from '@trpc/server'
 import { DataSource, EntityManager } from 'typeorm'
 import { z } from 'zod'
+import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 
 export default async function createBareRecipe(
   dataForRecipe: z.infer<typeof recipeInsertSchema>,
@@ -20,9 +20,9 @@ export default async function createBareRecipe(
       throw error
     }
     if (error.message.match(/duplicate key.*[\r\n]?.*name/)) {
-      throw new TRPCError({
+      throw new ExpectedTRPCError({
         code: 'BAD_REQUEST',
-        message: 'Recipe with this name already exists',
+        message: 'Recipe with this name already exists!',
       })
     }
     throw error
