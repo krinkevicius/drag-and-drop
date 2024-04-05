@@ -27,7 +27,13 @@ it('should add a comment', async () => {
     .getRepository(Comment)
     .findOneOrFail({ where: { id: newComment.id } })
 
-  expect(commentInDb).toEqual(newComment)
+  expect(commentInDb).toEqual({
+    id: newComment.id,
+    commentText: newComment.commentText,
+    recipeId: testRecipe.id,
+    userId: authUser.id,
+    createdAt: newComment.createdAt,
+  })
 })
 
 it('should not allow to add a comment without text', async () => {

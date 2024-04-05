@@ -1,6 +1,6 @@
 import { Comment, User } from '@server/entities'
 import { commentSchema } from '@server/entities/comment'
-import type { CommentWithAuhor } from '@server/entities/comment'
+import type { CommentWithAuthor } from '@server/entities/comment'
 import { publicProcedure } from '@server/trpc'
 
 const inputSchema = commentSchema.pick({ recipeId: true })
@@ -26,7 +26,7 @@ export default publicProcedure
       )
       .where('comment.recipeId = :recipeId', { recipeId })
       .orderBy('comment.createdAt', 'ASC')
-      .getRawMany()) as CommentWithAuhor[]
+      .getRawMany()) as CommentWithAuthor[]
 
     return comments
   })

@@ -36,7 +36,10 @@ export class Comment {
 
 export type CommentBare = Omit<Comment, 'recipe' | 'user'>
 
-export type CommentWithAuhor = Pick<Comment, 'commentText' | 'createdAt'> &
+export type CommentWithAuthor = Pick<
+  Comment,
+  'id' | 'commentText' | 'createdAt'
+> &
   Pick<User, 'username'>
 
 export const commentSchema = validates<CommentBare>().with({
