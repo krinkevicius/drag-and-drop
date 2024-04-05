@@ -8,6 +8,12 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
+      exclude: [
+        '**/src/database/**',
+        '**/src/shared**',
+        '**/.eslintrc.cjs',
+        '**/loader.js',
+      ],
     },
   },
   resolve: {

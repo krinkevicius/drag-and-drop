@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json --rootDir src && tsc-alias",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
+    "coverage:db": "vitest run --no-file-parallelism --maxWorkers 1 --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
     "format": "prettier --write \"src/**/*.ts\"",
