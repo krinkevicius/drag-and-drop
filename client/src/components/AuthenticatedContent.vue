@@ -5,7 +5,7 @@ const userStore = useUserStore()
 </script>
 
 <template>
-  <div class="AuthContentTestClass">
+  <div>
     <div v-if="userStore.isLoggedIn">
       <slot name="authContent"></slot>
     </div>
