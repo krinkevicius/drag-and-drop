@@ -92,7 +92,7 @@ jobs:
           retry-delay: 5s # Optional, only applicable to max-attempts > 1
 
       - name: Test client E2E
-        run: npm run test:e2e -w=client
+        run: npm run test:e2e:chromium -w=client
         env:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc

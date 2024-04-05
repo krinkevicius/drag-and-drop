@@ -9,7 +9,6 @@ test.describe.serial('signup and login sequence', () => {
 
     const signupButton = page.getByRole('button', { name: 'Sign Up' })
     const signupForm = page.getByTestId('signupForm')
-    const signupSuccessMessage = page.getByTestId('successMessage')
 
     await expect(signupForm).toBeHidden()
     await expect(signupButton).toBeVisible()
@@ -23,6 +22,7 @@ test.describe.serial('signup and login sequence', () => {
     await signupForm.locator('input[type="password"]').fill(password)
     await signupForm.locator('button[type="submit"]').click()
 
+    const signupSuccessMessage = page.getByTestId('successMessage')
     await expect(signupSuccessMessage).toBeVisible()
   })
 
