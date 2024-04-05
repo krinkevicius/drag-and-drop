@@ -42,8 +42,6 @@ function dragOverHandler(event: DragEvent) {
     return
   }
 
-  console.log(`dragover sees dragValue as ${dragDataStore.dragData.dragValue}`)
-
   // based on https://www.youtube.com/watch?v=jfYWwQrtzzY
 
   const itemWrappers = [...document.querySelectorAll('.item-wrapper')]
@@ -75,9 +73,6 @@ function onDropHandler() {
   if (!dragDataStore.dragData) {
     return
   }
-  console.log('drop!')
-  console.log(`dragValue = ${dragDataStore.dragData.dragValue}`)
-
   if (dragDataStore.dragData.dragType === 'icon') {
     const newItem = createRecipeStore.createNewItem(
       dragDataStore.dragData.dragValue as keyof typeof recipeItemsDefault
@@ -126,6 +121,7 @@ const createRecipe = withError(async () => {
   >
     <div class="mb-6 flex w-full flex-row justify-center">
       <input
+        data-testid="recipeNameInput"
         class="focus:shadow-outline w-3/4 appearance-none rounded-l-lg border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
         label="Recipe Name"
         type="text"

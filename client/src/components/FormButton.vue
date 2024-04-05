@@ -1,28 +1,18 @@
 <script setup lang="ts">
-import { trpc } from '@/trpc'
-import type { RecipeForCard } from '@mono/server/src/shared/entities'
-import RecipeCard from '@/components/RecipeCard.vue'
-import { ref, onBeforeMount } from 'vue'
-
-const favoriteRecipes = ref<RecipeForCard[]>([])
-const loading = ref<boolean>(false)
-
-onBeforeMount(async () => {
-  loading.value = true
-  favoriteRecipes.value = await trpc.user.getFavorites.query()
-  loading.value = false
-})
+defineProps<{
+  loading: boolean
+  successMessage: string
+  buttonText: string
+}>()
+defineEmits(['click'])
 </script>
 
 <template>
-  <div class="container mx-auto flex max-w-xs flex-col gap-4 py-2 sm:max-w-md md:max-w-3xl">
-    <div class="mt-4 text-center text-2xl font-semibold" data-testid="favoritesHeader">
-      Check your favorite recipes here!
-    </div>
-    <div class="self-center" v-if="loading">
+  <div>
+    <div v-if="loading">
       <svg
         aria-hidden="true"
-        class="h-16 w-16 animate-spin fill-main-blue text-gray-200 dark:text-gray-600 md:h-24 md:w-24"
+        class="h-8 w-8 animate-spin fill-main-blue text-gray-200 dark:text-gray-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -36,16 +26,23 @@ onBeforeMount(async () => {
           fill="currentFill"
         />
       </svg>
+      <span class="sr-only">Loading...</span>
     </div>
-    <div
-      class="container m-auto grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:grid-cols-3"
-      v-else-if="favoriteRecipes.length"
-    >
-      <div v-for="(recipe, index) in favoriteRecipes" :key="index">
-        <RecipeCard :recipe="recipe" />
+    <div data-testid="successMessage" v-else-if="successMessage.length">
+      {{ successMessage }}
+      <div>
+        <slot name="onSuccess"></slot>
       </div>
     </div>
-    <div class="text-center" v-else>You do not have any favorite recipes yet</div>
+    <div v-else>
+      <button
+        type="submit"
+        class="focus:shadow-outline rounded bg-main-blue px-4 py-2 font-bold text-white hover:bg-secondary-blue focus:outline-none"
+        @click="$emit('click')"
+      >
+        {{ buttonText }}
+      </button>
+    </div>
   </div>
 </template>
 

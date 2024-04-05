@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
 import { ref, onBeforeMount } from 'vue'
-import { RecipeItems } from '@/consts'
+import { recipeItemsDefault } from '@/consts'
 import SidebarButton from '@/components/dashboard/SidebarButton.vue'
-import RecipeIcon from '@/components/RecipeIcon.vue'
+import RecipeIcon from '@/components/dashboard/RecipeIcon.vue'
 
 const router = useRouter()
 
@@ -13,56 +13,63 @@ onBeforeMount(() => {
   }
 })
 
-const icons = ref<(keyof typeof RecipeItems)[]>(['image', 'description', 'list', 'categories'])
+const icons = ref<(keyof typeof recipeItemsDefault)[]>([
+  'image',
+  'description',
+  'ingredientList',
+  'categories',
+])
 </script>
 
 <template>
-  <div class="dashboard">
-    <div class="sidebar" data-testid="dashboardSidebar">
-      This is sidebar
-      <SidebarButton :name="'NewRecipe'" :label="'Create New Recipe'" />
-      <Transition name="iconWrapperTransition">
-        <div v-if="router.currentRoute.value.name === 'NewRecipe'">
-          <div class="icon-wrapper" v-for="(icon, index) in icons" :key="index">
+  <div class="dashboard flex w-full flex-col bg-main-blue text-xs md:mx-0 md:flex-row md:text-base">
+    <div class="w-full md:mx-0 md:w-1/4">
+      <div
+        class="sidebar flex flex-row justify-around gap-y-2 bg-main-blue pb-1 text-xs text-white md:h-screen md:flex-col md:items-center md:justify-start md:px-2 md:text-base"
+        data-testid="dashboardSidebar"
+      >
+        <div>
+          <SidebarButton :name="'NewRecipe'" :label="'Create New Recipe'" />
+          <Transition>
+            <div
+              class="hidden md:flex md:flex-col"
+              v-if="router.currentRoute.value.name === 'NewRecipe'"
+            >
+              <div class="p-5" v-for="(icon, index) in icons" :key="index">
+                <RecipeIcon :itemType="icon" />
+              </div>
+            </div>
+          </Transition>
+        </div>
+        <div>
+          <SidebarButton :name="'AccessRights'" :label="'Access Rights'" />
+        </div>
+      </div>
+      <Transition>
+        <div
+          class="mx-8 flex flex-row md:hidden"
+          v-if="router.currentRoute.value.name === 'NewRecipe'"
+        >
+          <div class="p-5" v-for="(icon, index) in icons" :key="index">
             <RecipeIcon :itemType="icon" />
           </div>
-          <div class="dropdown-content">This is icons div</div>
         </div>
       </Transition>
-      <SidebarButton :name="'AccessRights'" :label="'Access Rights'" />
     </div>
-    <RouterView class="router" />
+    <div class="w-full bg-gray-100 px-8">
+      <RouterView />
+    </div>
   </div>
 </template>
 
 <style scoped>
-.dashboard {
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: 300px auto;
-  grid-template-areas: 'sidebar router';
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.3s ease;
 }
 
-.sidebar {
-  grid-area: sidebar;
-  height: 100vh;
-  border: 2px solid red;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.router {
-  grid-area: router;
-}
-
-.iconWrapperTransition-enter-active,
-.iconWrapperTransition-leave-active {
-  transition: height opacity 0.75s ease;
-}
-
-.iconWrapperTransition-enter-from,
-.iconWrapperTransition-leave-to {
+.v-enter-from,
+.v-leave-to {
   height: 0;
   opacity: 0;
 }

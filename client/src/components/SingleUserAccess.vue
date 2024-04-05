@@ -30,7 +30,6 @@ const updateRights = withError(async () => {
   loading.value = true
   role.value = await trpc.user.updateAccessRights.mutate({ id: props.user.id })
   loading.value = false
-  console.log(role.value)
 }, globalErrorMessage)
 </script>
 

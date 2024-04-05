@@ -5,10 +5,12 @@ const userStore = useUserStore()
 </script>
 
 <template>
-  <div v-if="userStore.isLoggedIn">
-    <slot name="authContent"></slot>
-  </div>
-  <div v-else>
-    <slot></slot>
+  <div class="AuthContentTestClass">
+    <div v-if="userStore.isLoggedIn">
+      <slot name="authContent"></slot>
+    </div>
+    <div v-else>
+      <slot></slot>
+    </div>
   </div>
 </template>

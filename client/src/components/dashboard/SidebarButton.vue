@@ -10,16 +10,21 @@ const props = defineProps({
 </script>
 
 <template>
-  <button
-    :class="{ active: router.currentRoute.value.name === props.name }"
-    @click="
-      () => {
-        router.push({ name: props.name })
-      }
-    "
-  >
-    {{ props.label }}
-  </button>
+  <div>
+    <button
+      class="p-2"
+      :class="[
+        router.currentRoute.value.name === props.name ? 'bg-secondary-blue' : 'hover:underline',
+      ]"
+      @click="
+        () => {
+          router.push({ name: props.name })
+        }
+      "
+    >
+      {{ props.label }}
+    </button>
+  </div>
 </template>
 
 <style scoped>
