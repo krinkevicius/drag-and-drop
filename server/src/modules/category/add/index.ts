@@ -1,6 +1,6 @@
 import { Category, Recipe } from '@server/entities'
 import { categorySchema } from '@server/entities/category'
-import { TRPCError } from '@trpc/server'
+import { ExpectedTRPCError } from '@server/utils/expectedTRPCError'
 import { DataSource, EntityManager } from 'typeorm'
 import { z } from 'zod'
 
@@ -37,7 +37,7 @@ export default async function addCategories(
       throw error
     }
     if (error.message.match(/duplicate key/)) {
-      throw new TRPCError({
+      throw new ExpectedTRPCError({
         code: 'BAD_REQUEST',
         message: 'Recipe already has this category!',
       })

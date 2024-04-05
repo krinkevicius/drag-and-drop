@@ -1,4 +1,5 @@
 import {
+  Category,
   Description,
   Image,
   Ingredient,
@@ -49,6 +50,23 @@ export class AddFirstRecipe1712235501522 implements MigrationInterface {
         '77bcd6b1-950e-4a70-932e-739c3f5ed896',
       ],
     })
+
+    const categories = await Promise.all(
+      ['dessert', 'chocolate', 'something else'].map(async (c) => {
+        const category =
+          (await manager
+            .getRepository(Category)
+            .findOne({ where: { name: c } })) ||
+          (await manager.getRepository(Category).save({ name: c }))
+        return category
+      })
+    )
+
+    await manager
+      .createQueryBuilder()
+      .relation(Recipe, 'categories')
+      .of(id)
+      .add(categories)
 
     const list = await manager.getRepository(IngredientList).save({
       id: '8dbb9472-5614-4b20-816d-067eea9581e3',
