@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { loginNewUser } from 'utils/api'
+import { loginNewUser, createRecipe } from 'utils/api'
 import { fakeRecipeName } from 'utils/fakeData'
 
 test('correct items are shown after dragging icons', async ({ page, browserName }) => {
@@ -65,67 +65,104 @@ test('correct items are shown after dragging icons', async ({ page, browserName 
   await expect(categoriesItem).toBeVisible()
 })
 
-test.describe.serial('Recipe flow', () => {
-  test.skip(({ browserName }) => browserName !== 'firefox', 'Only on firefox')
+test('admin can create a new recipe via the front end', async ({ page, browserName }) => {
+  test.skip(browserName !== 'firefox', 'Not supported on chromium')
+  await loginNewUser(page, true)
 
-  const recipeName = fakeRecipeName()
+  await page.goto('/dashboard/new-recipe')
 
-  test('admin can create a recipe', async ({ page }) => {
-    await loginNewUser(page, true)
+  const sidebar = page.getByTestId('dashboardSidebar')
+  const descriptionIcon = sidebar.getByTestId('draggable-description-icon')
+  const descriptionItem = page.getByTestId('description-item')
+  const recipeSuccessMessage = page.getByTestId('successMessage')
 
-    await page.goto('/dashboard/new-recipe')
+  await expect(descriptionItem).toBeHidden()
 
-    const sidebar = page.getByTestId('dashboardSidebar')
-    const descriptionIcon = sidebar.getByTestId('draggable-description-icon')
-    const descriptionItem = page.getByTestId('description-item')
-    const recipeSuccessMessage = page.getByTestId('successMessage')
+  const dropzone = page.getByTestId('dropzone')
+  await descriptionIcon.dragTo(dropzone)
 
-    await expect(descriptionItem).toBeHidden()
+  await expect(descriptionItem).toBeVisible()
 
-    const dropzone = page.getByTestId('dropzone')
-    await descriptionIcon.dragTo(dropzone)
+  await descriptionItem.locator('.ql-editor').fill('This is a description')
 
-    await expect(descriptionItem).toBeVisible()
+  await page.getByTestId('recipeNameInput').fill(fakeRecipeName())
+  await page.getByRole('button', { name: 'Create Recipe' }).click()
 
-    await descriptionItem.locator('.ql-editor').fill('This is a description')
+  await page.getByRole('button', { name: 'Confirm' }).click()
 
-    await page.getByTestId('recipeNameInput').fill(recipeName)
-    await page.getByRole('button', { name: 'Create Recipe' }).click()
+  await expect(recipeSuccessMessage).toBeVisible()
+})
 
-    await page.getByRole('button', { name: 'Confirm' }).click()
+test('visitor can browse recipes, but cannot comment or add to favorites', async ({ page }) => {
+  // instead of going through Front End, create recipe via API
+  const testRecipe = await createRecipe()
 
-    await expect(recipeSuccessMessage).toBeVisible()
-  })
+  await page.goto('/')
 
-  test('visitor can browse recipes, but cannot leave comments', async ({ page }) => {
-    await page.goto('/')
+  // Sanity check, visitor should see Signup button
+  await expect(page.getByRole('button', { name: 'Sign Up' })).toBeVisible()
 
-    const testRecipeCard = page.getByTestId(`singleRecipeCard-${recipeName}`)
+  // If recipe was created, it's card should be visible on home page
+  const testRecipeCard = page.getByTestId(`singleRecipeCard-${testRecipe.name}`)
+  await expect(testRecipeCard).toBeVisible()
 
-    // Recipe Card should be found as it was created in a previous test
-    await expect(testRecipeCard).toBeVisible()
-    await testRecipeCard.click()
+  // Visitor should be able to click on the card and get redirected to recipe's page:
+  await testRecipeCard.click()
 
-    await expect(page).toHaveURL(/\/recipe/)
-    await expect(page.getByRole('heading', { name: recipeName })).toBeVisible()
+  await expect(page).toHaveURL(/\/recipe/)
+  await expect(page.getByRole('heading', { name: testRecipe.name })).toBeVisible()
 
-    await expect(page.getByTestId('unableToComment')).toBeVisible()
-  })
+  // Visitor will not see Add to favorites button or be able to post comments
+  await expect(page.getByTestId('favoritesButton')).toBeHidden()
+  await expect(page.getByTestId('unableToComment')).toBeVisible()
+})
 
-  test('registered user can browse recipes and leave comments', async ({ page }) => {
-    await loginNewUser(page)
+test('registered user should be able to add recipe into their favorites', async ({ page }) => {
+  const testRecipe = await createRecipe()
+  await loginNewUser(page)
 
-    await page.goto('/')
+  await page.goto('/')
 
-    const testRecipeCard = page.getByTestId(`singleRecipeCard-${recipeName}`)
+  const testRecipeCard = page.getByTestId(`singleRecipeCard-${testRecipe.name}`)
+  await expect(testRecipeCard).toBeVisible()
+  await testRecipeCard.click()
+  await expect(page).toHaveURL(/\/recipe/)
+  await expect(page.getByRole('heading', { name: testRecipe.name })).toBeVisible()
 
-    // Recipe Card should be found as it was created in a previous test
-    await expect(testRecipeCard).toBeVisible()
-    await testRecipeCard.click()
+  // Registered user should be able to see add to favorites button and click it
+  const favoritesButton = page.getByTestId('favoritesButton')
+  await expect(favoritesButton).toBeVisible()
+  await favoritesButton.click()
 
-    await expect(page).toHaveURL(/\/recipe/)
-    await expect(page.getByRole('heading', { name: recipeName })).toBeVisible()
+  // After going to favorites page, user should find a card for it
+  await page.goto('/favorites')
 
-    await expect(page.getByTestId('unableToComment')).toBeHidden()
-  })
+  const favoriteRecipeCard = page.getByTestId(`singleRecipeCard-${testRecipe.name}`)
+  await expect(favoriteRecipeCard).toBeVisible()
+})
+
+test('registered user can browse recipes and leave comments', async ({ page }) => {
+  const testRecipe = await createRecipe()
+  await loginNewUser(page)
+
+  await page.goto('/')
+
+  const testRecipeCard = page.getByTestId(`singleRecipeCard-${testRecipe.name}`)
+
+  await expect(testRecipeCard).toBeVisible()
+  await testRecipeCard.click()
+
+  await expect(page).toHaveURL(/\/recipe/)
+  await expect(page.getByRole('heading', { name: testRecipe.name })).toBeVisible()
+
+  await expect(page.getByTestId('unableToComment')).toBeHidden()
+
+  // No comments can be seen before posting
+  const singleComment = page.getByTestId('singleComment')
+  await expect(singleComment).toBeHidden()
+
+  await page.getByTestId('commentArea').fill('Yummy!')
+  await page.getByRole('button', { name: 'Post' }).click()
+
+  await expect(singleComment).toBeVisible()
 })

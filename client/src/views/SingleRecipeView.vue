@@ -82,6 +82,7 @@ const submitComment = withError(async () => {
           <AuthenticatedContent>
             <template #authContent>
               <button
+                data-testid="favoritesButton"
                 class="absolute bottom-0 right-0 z-[1] cursor-pointer border-[none] bg-transparent p-2 text-xl transition-[opacity,filter] duration-[0.3s] ease-[ease]"
                 :class="[isFavorite ? 'opacity-100 saturate-100' : 'opacity-60 saturate-0']"
                 @click="userStore.addRemoveFavorites(recipeId)"
@@ -102,7 +103,12 @@ const submitComment = withError(async () => {
       </div>
       <div class="mb-4">
         <div class="comments" v-if="comments.length">
-          <div class="my-2" v-for="(comment, index) in comments" :key="index">
+          <div
+            data-testid="singleComment"
+            class="my-2"
+            v-for="(comment, index) in comments"
+            :key="index"
+          >
             <SingleComment :comment="comment" />
           </div>
         </div>
@@ -119,6 +125,7 @@ const submitComment = withError(async () => {
                   >Share your thoughts!</label
                 >
                 <textarea
+                  data-testid="commentArea"
                   id="comment"
                   rows="4"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"

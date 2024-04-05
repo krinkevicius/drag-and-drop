@@ -18,3 +18,16 @@ export const fakeUser = () => ({
 export const fakeRecipeName = () => {
   return random.word()
 }
+
+export const fakeRecipe = () => ({
+  name: random.word(),
+  items: [
+    {
+      id: random.guid({ version: 4 }),
+      itemType: 'description',
+      data: {
+        descriptionText: 'Mix ingredients',
+      },
+    },
+  ],
+})

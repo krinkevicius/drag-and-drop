@@ -12,7 +12,7 @@
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-    "start": "node --import ./loader.js ./dist/index.js",
+    "start": "node --loader ./loader.js ./dist/index.js",
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest --no-file-parallelism --maxWorkers 1",
