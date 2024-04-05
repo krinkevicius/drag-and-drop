@@ -52,7 +52,7 @@ export class AddFirstRecipe1712235501522 implements MigrationInterface {
     })
 
     const categories = await Promise.all(
-      ['dessert', 'chocolate', 'something else'].map(async (c) => {
+      ['dessert'].map(async (c) => {
         const category =
           (await manager
             .getRepository(Category)
