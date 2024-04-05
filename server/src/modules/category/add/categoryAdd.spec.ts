@@ -10,8 +10,6 @@ afterAll(async () => {
   await dropTestDatabase(db)
 })
 
-// const testRecipe = fakeRecipe()
-
 const testRecipe = await db.getRepository(Recipe).save(fakeRecipe())
 const testCategory = await db.getRepository(Category).save(fakeCategory())
 
