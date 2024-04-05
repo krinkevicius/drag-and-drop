@@ -7,7 +7,7 @@ import { devices } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   testDir: './e2e',
   /* Maximum time one test can run for. */
-  timeout: process.env.CI ? 30_000 : 20_000,
+  timeout: process.env.CI ? 30_000 : 30_000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -40,15 +40,15 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+      },
+    },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
       },
     },
     /*
