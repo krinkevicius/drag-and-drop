@@ -39,7 +39,7 @@ export default async function uploadToAws(
     logger.info('Image uploaded to aws!')
     return `https://${s3config.bucket}.s3.${s3config.clientConfig.region}.amazonaws.com/${imageName}`
   } catch (error) {
-    logger.error('Unable to upload image to aws')
-    throw new Error('Unable to upload image to aws.', { cause: error })
+    logger.error(`Unable to upload image to aws: ${error}`)
+    throw new Error('Unable to upload image to aws.')
   }
 }

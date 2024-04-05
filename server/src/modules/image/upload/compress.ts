@@ -28,6 +28,6 @@ export default async function compressImage(buffer: Buffer, key?: string) {
 
     return compressedBuffer
   } catch (error) {
-    throw new Error('Error compressing image.', { cause: error })
+    throw new Error('Error compressing image.')
   }
 }
