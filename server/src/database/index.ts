@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { DataSource, type DataSourceOptions } from 'typeorm'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { newDb } from 'pg-mem'
+import { isTest } from '@server/config'
 import * as entities from '../entities'
 
 export function createDatabase(
@@ -16,7 +17,7 @@ export function createDatabase(
   return new DataSource({
     // defaults
     entities,
-    migrations: [relative('./migrations/**/*.ts')],
+    migrations: isTest ? [] : [relative('./migrations/**/*.ts')],
     namingStrategy: new SnakeNamingStrategy(),
 
     // overrides

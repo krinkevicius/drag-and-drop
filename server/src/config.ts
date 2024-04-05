@@ -5,7 +5,7 @@ const { env } = process
 
 if (!env.NODE_ENV) env.NODE_ENV = 'development'
 
-const isTest = env.NODE_ENV === 'test'
+export const isTest = env.NODE_ENV === 'test'
 const isDevTest = env.NODE_ENV === 'development' || isTest
 
 export const isInMemory = env.DB_TYPE === 'pg-mem'
