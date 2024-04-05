@@ -1,8 +1,5 @@
-import {
-  Comment,
-  CommentWithAuthor,
-  commentSchema,
-} from '@server/entities/comment'
+import { Comment, commentSchema } from '@server/entities/comment'
+import type { CommentWithAuthor } from '@server/entities/comment'
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 
 export default authenticatedProcedure
@@ -20,7 +17,6 @@ export default authenticatedProcedure
         recipeId,
       })
 
-      // console.log(newComment)
       return {
         id: newComment.id,
         commentText: newComment.commentText,
