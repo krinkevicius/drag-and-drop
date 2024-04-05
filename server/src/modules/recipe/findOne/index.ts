@@ -72,6 +72,7 @@ export default publicProcedure
     }
 
     return {
+      id,
       name: recipe.name,
       items,
     }

@@ -16,7 +16,7 @@ export default authenticatedProcedure.query(
     const favorites = userInDb!.favoriteRecipes.map((favorite) => ({
       id: favorite.id,
       name: favorite.name,
-      imageUrl: favorite.images[0].imageUrl,
+      imageUrl: favorite.images.length ? favorite.images[0].imageUrl : '',
     })) as RecipeForCard[]
 
     return favorites

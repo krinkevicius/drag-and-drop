@@ -3,7 +3,6 @@ import login from './login'
 import signup from './signup'
 import findAll from './findAll'
 import updateAccessRights from './updateAccessRights'
-import errors from './errors'
 import addRemoveFavorites from './addRemoveFavorites'
 import getFavorites from './getFavorites'
 
@@ -12,7 +11,6 @@ export default router({
   signup,
   findAll,
   updateAccessRights,
-  errors,
   addRemoveFavorites,
   getFavorites,
 })
