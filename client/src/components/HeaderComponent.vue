@@ -84,7 +84,7 @@ function switchToLogin() {
     <template #popupContent>
       <div class="w-full max-w-xs">
         <div v-if="loginVisible">
-          <form>
+          <form data-testid="loginForm">
             <div class="mb-4">
               <label class="mb-2 block text-sm font-bold text-gray-700" for="login-email">
                 Email
@@ -122,7 +122,7 @@ function switchToLogin() {
           </form>
         </div>
         <div v-if="signupVisible">
-          <form>
+          <form data-testid="signupForm">
             <div class="mb-4">
               <label class="mb-2 block text-sm font-bold text-gray-700" for="signup-email">
                 Email
@@ -205,7 +205,7 @@ function switchToLogin() {
                       class="hover:underline"
                       @click="
                         () => {
-                          router.push({ name: 'CreateRecipe' })
+                          router.push({ name: 'NewRecipe' })
                         }
                       "
                     >

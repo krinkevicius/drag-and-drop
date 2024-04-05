@@ -15,6 +15,7 @@ function goToRecipe() {
 
 <template>
   <div
+    :data-testid="`singleRecipeCard-${$props.recipe.name}`"
     @click="goToRecipe"
     class="relative aspect-square overflow-hidden rounded-lg border-2 border-black hover:cursor-pointer"
   >
