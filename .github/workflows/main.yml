@@ -40,7 +40,7 @@ jobs:
         run: npm run lint -w=client
 
       - name: Test server
-        run: npm run test:db -w=server
+        run: npm run coverage:db -w=server
         env:
           TOKEN_KEY: ${{secrets.TOKEN_KEY}}
           DB_NAME: testdb
@@ -204,7 +204,9 @@ jobs:
                 "AWS_BUCKET_NAME": "${{secrets.AWS_BUCKET_NAME}}",
                 "AWS_BUCKET_ACCESS_KEY": "${{secrets.AWS_BUCKET_ACCESS_KEY}}",
                 "AWS_BUCKET_SECRET_ACCESS_KEY": "${{secrets.AWS_BUCKET_SECRET_ACCESS_KEY}}",
-                "SENTRY_SERVER_DSN": "${{secrets.SENTRY_SERVER_DSN}}"
+                "SENTRY_SERVER_DSN": "${{secrets.SENTRY_SERVER_DSN}}",
+                "ADMIN_EMAIL": "${{secrets.ADMIN_EMAIL}}",
+                "ADMIN_PASSWORD": "${{secrets.ADMIN_PASSWORD}}"
               }
             }
           }' > containers.json
