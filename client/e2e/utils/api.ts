@@ -69,7 +69,7 @@ export async function createRecipe() {
   try {
     await adminTrpc.recipe.create.mutate(recipeData)
   } catch (error) {
-    console.log(error)
+    //
   }
   return recipeData
 }
