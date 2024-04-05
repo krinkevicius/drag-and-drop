@@ -14,3 +14,7 @@ export const fakeUser = () => ({
   username: random.string({ alpha: true, numeric: true, length: 5 }),
   password: 'password.123',
 })
+
+export const fakeRecipeName = () => {
+  return random.word()
+}

@@ -1,22 +1,23 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { RecipeItems } from '@/consts'
+import type { RecipeItem } from '@mono/server/src/shared/entities'
+import { recipeItemsDefault } from '@/consts'
 import { v4 as uuidv4 } from 'uuid'
-// import { trpc } from '@/trpc'
+import { trpc } from '@/trpc'
 
 export type ItemRecord = {
   id: string
-  itemType: keyof typeof RecipeItems
+  itemType: keyof typeof recipeItemsDefault
   data: { [key: string]: any }
 }
 
 export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
   const recipeItems = ref<ItemRecord[]>([])
 
-  function createNewItem(itemType: keyof typeof RecipeItems): ItemRecord {
+  function createNewItem(itemType: keyof typeof recipeItemsDefault): ItemRecord {
     const id = uuidv4()
     // need to create a deep copy of data from recipeItems
-    const data = JSON.parse(JSON.stringify(RecipeItems[itemType].data))
+    const data = JSON.parse(JSON.stringify(recipeItemsDefault[itemType].data))
     return { id, itemType, data }
   }
 
@@ -47,17 +48,26 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     }
   }
 
+  function removeItem(item: ItemRecord) {
+    recipeItems.value.splice(recipeItems.value.indexOf(item), 1)
+  }
+
   const recipeName = ref('')
 
-  function createRecipe() {
-    const filteredItems = recipeItems.value.filter((item) => Object.keys(item.data).length > 0)
+  async function createRecipe() {
+    if (recipeName.value === '') throw new Error('Cannot create a recipe without a name!')
 
-    if (!filteredItems.length || recipeName.value === '') {
-      console.log('no data in items')
-      return
-    }
-    console.log('recipe should be created')
-    // const itemIds = filteredItems.map((item) => item.id)
+    const filteredItems = recipeItems.value.filter(
+      (item) => item.itemType !== 'help'
+    ) as RecipeItem[]
+
+    if (!recipeItems.value.length) throw new Error('Cannot create recipe without items')
+
+    await trpc.recipe.create.mutate({ name: recipeName.value, items: filteredItems })
+
+    //Reser recipeItems and recipeName
+    recipeName.value = ''
+    recipeItems.value = []
   }
 
   return {
@@ -66,8 +76,7 @@ export const useCreateRecipeStore = defineStore('createRecipeStore', () => {
     addToItems,
     moveItem,
     updatePlaceholderItem,
-    // itemInsertIndex,
-    // resetInsertIndex,
+    removeItem,
     recipeName,
     createRecipe,
   }
