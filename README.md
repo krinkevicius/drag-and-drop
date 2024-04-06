@@ -96,7 +96,7 @@ npm run dev:mem
 
 ```sh
 cd client
-npm npm run dev
+npm run dev
 ```
 
 If you ran migrations, you should be able to login as admin user with the credentials you set up in server `env` file.
