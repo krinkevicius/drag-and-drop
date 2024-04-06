@@ -1,4 +1,4 @@
-# WD-3.3 Full-stack Fundamentals
+# WD-3.4 Full-stack Capstone Project
 
 This is implementation of Turing College Web Development project for Module 3 Sprint 4.
 
@@ -16,7 +16,7 @@ This is implementation of Turing College Web Development project for Module 3 Sp
 1. Clone this repository:
 
 ```sh
- git clone git@github.com:TuringCollegeSubmissions/krinke-BE.1.5.git
+ git clone git@github.com:krinkevicius/drag-and-drop.git
 ```
 
 2. Navigate to the project directory:
@@ -102,11 +102,11 @@ npm npm run dev
 If you ran migrations, you should be able to login as admin user with the credentials you set up in server `env` file.
 Afterwards, you will be redirected to the dashboard. There you can drag icons from the side bar to add ingredients, images, descriptions or categories.
 
-![](icons.gif)
+<img src="icons.gif" width="480" height="270"/>
 
 You can also drag items around if you want change their order.
 
-![](items.gif)
+<img src="items.gif" width="480" height="270"/>
 
 You can also signup with regular user.
 
