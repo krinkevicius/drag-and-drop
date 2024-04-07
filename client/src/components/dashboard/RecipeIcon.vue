@@ -11,6 +11,8 @@ const props = defineProps({
 
 const pathToIcon = `/${props.itemType}.svg`
 
+const title = props.itemType.replace(/[A-Z]/g, ' $&').toLowerCase()
+
 function dragStartHandler() {
   dragDataStore.dragData = { dragType: 'icon', dragValue: props.itemType }
 }
@@ -22,6 +24,7 @@ function dragEndHandler() {
 
 <template>
   <div
+    :title="`Drag me to add ${title}!`"
     class="h-12 w-12 bg-secondary-blue bg-center bg-no-repeat"
     draggable="true"
     @dragstart="dragStartHandler"
