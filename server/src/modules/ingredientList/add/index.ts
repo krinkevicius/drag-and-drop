@@ -52,6 +52,9 @@ export default async function addIngredientLists(
 
       await Promise.all(
         list.quantityIngredientPairs.map(async (pair) => {
+          /*
+          The below fails test 'should allow to save multiple lists with same ingredient in each of them'
+          It seems that map / async doesn't wait for findOne?
           const ingredient =
             (await dbOrManager
               .getRepository(Ingredient)
@@ -59,10 +62,21 @@ export default async function addIngredientLists(
             (await dbOrManager
               .getRepository(Ingredient)
               .save({ name: pair.name }))
+          */
+          let ingredient
+          try {
+            ingredient = await dbOrManager
+              .getRepository(Ingredient)
+              .save({ name: pair.name })
+          } catch (error) {
+            ingredient = await dbOrManager
+              .getRepository(Ingredient)
+              .findOne({ where: { name: pair.name } })
+          }
 
           await dbOrManager.getRepository(Quantity).save({
             quantity: pair.quantity,
-            ingredientId: ingredient.id,
+            ingredientId: ingredient?.id,
             ingredientListId: list.id,
           })
         })

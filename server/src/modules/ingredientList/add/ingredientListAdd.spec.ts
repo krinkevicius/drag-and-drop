@@ -68,6 +68,49 @@ it('should save multiple lists', async () => {
   })
 })
 
+it('should allow to save multiple lists with same ingredient in each of them', async () => {
+  const [ingredientList1, ingredientList2] = [
+    fakeIngredientList(),
+    fakeIngredientList(),
+  ]
+
+  await addIngredientLists(
+    {
+      recipeId: testRecipe.id,
+      lists: [
+        {
+          ...ingredientList1,
+          quantityIngredientPairs: [
+            { name: 'salt', quantity: '1 pinch' },
+            { name: 'pepper', quantity: '1 pinch' },
+          ],
+        },
+        {
+          ...ingredientList2,
+          quantityIngredientPairs: [{ name: 'salt', quantity: '2 teaspoons' }],
+        },
+      ],
+    },
+    db
+  )
+  const savedLists = await db.getRepository(IngredientList).find({
+    where: [{ id: ingredientList1.id }, { id: ingredientList2.id }],
+    relations: { quantities: { ingredient: true } },
+  })
+  expect(savedLists[0].quantities).toHaveLength(2)
+  expect(savedLists[1].quantities).toHaveLength(1)
+
+  expect(savedLists[0].quantities[0].ingredient).toEqual({
+    id: expect.any(Number),
+    name: 'salt',
+  })
+
+  expect(savedLists[1].quantities[0].ingredient).toEqual({
+    id: expect.any(Number),
+    name: 'salt',
+  })
+})
+
 it('throws an error if lists have the same id', async () => {
   const randomUUID = getRandomUUID()
 
