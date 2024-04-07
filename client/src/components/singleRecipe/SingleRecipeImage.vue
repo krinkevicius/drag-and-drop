@@ -8,8 +8,8 @@ defineProps({
 </script>
 
 <template>
-  <div>
-    <img :src="data.imageUrl" :alt="data.imageName" />
+  <div class="flex justify-center">
+    <img class="max-h-96" :src="data.imageUrl" :alt="data.imageName" />
   </div>
 </template>
 

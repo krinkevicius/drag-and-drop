@@ -20,7 +20,7 @@ function goToRecipe() {
     class="relative aspect-square overflow-hidden rounded-lg border-2 border-black hover:cursor-pointer"
   >
     <img
-      class="max-h-64 w-full bg-white object-cover"
+      class="h-full w-full object-cover object-center"
       :src="recipe.imageUrl || `/logo.svg`"
       :alt="recipe.name"
     />
