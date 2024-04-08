@@ -121,6 +121,6 @@ You can also signup with regular user.
 
 ## Live version
 
-Live version is hosted here (more recipies comming soon!):
+Live version is hosted here (more recipies coming soon!):
 
 https://blue-kitchen.l6jprqq8fc77i.eu-central-1.cs.amazonlightsail.com/
