@@ -1,6 +1,6 @@
-# WD-3.4 Full-stack Capstone Project
+# Blue Kitchen
 
-This is implementation of Turing College Web Development project for Module 3 Sprint 4.
+A full stack recipe blog.
 
 ## Table of Contents
 
